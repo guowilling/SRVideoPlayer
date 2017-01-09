@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="en2-AF-e3q">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="A0m-b4-KUF">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="en2-AF-e3q" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="M4g-QQ-fbj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="mMS-uV-O2c" kind="relationship" relationship="rootViewController" id="WJs-U0-vEe"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kpZ-sj-vNg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="118" y="123"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="XZU-d0-eC1">
+            <objects>
+                <viewController id="mMS-uV-O2c" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="VS2-WN-Ot5"/>
+                        <viewControllerLayoutGuide type="bottom" id="kbA-nZ-gpn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="k5z-se-pG8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfF-qe-CQZ">
+                                <rect key="frame" x="164.5" y="268.5" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="localBtnAction" destination="mMS-uV-O2c" eventType="touchUpInside" id="6j7-bt-Veg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XV3-m6-Qnx">
+                                <rect key="frame" x="164.5" y="368.5" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="netBtnAction" destination="mMS-uV-O2c" eventType="touchUpInside" id="HWF-Si-fv4"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="XV3-m6-Qnx" firstAttribute="centerY" secondItem="k5z-se-pG8" secondAttribute="centerY" constant="50" id="Eg4-0k-93u"/>
+                            <constraint firstItem="XV3-m6-Qnx" firstAttribute="centerX" secondItem="k5z-se-pG8" secondAttribute="centerX" id="Haa-th-wFq"/>
+                            <constraint firstItem="rfF-qe-CQZ" firstAttribute="centerX" secondItem="k5z-se-pG8" secondAttribute="centerX" id="RVa-NE-6mh"/>
+                            <constraint firstItem="rfF-qe-CQZ" firstAttribute="centerY" secondItem="k5z-se-pG8" secondAttribute="centerY" constant="-50" id="xf7-uh-ieI"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="r6C-25-W3c"/>
+                    <connections>
+                        <outlet property="localBtn" destination="rfF-qe-CQZ" id="2M7-UL-53D"/>
+                        <outlet property="netBtn" destination="XV3-m6-Qnx" id="ssd-dO-H0x"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NMr-dy-lcV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1001" y="123"/>
+        </scene>
+    </scenes>
+</document>
