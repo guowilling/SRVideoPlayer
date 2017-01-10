@@ -74,7 +74,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 - (void)dealloc {
     
-    [self releasePlayer];
+    [self destroyPlayer];
 }
 
 #pragma mark - Lazy Load
@@ -386,7 +386,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                 NSLog(@"AVPlayerStatusFailed playerItem: %@", _playerItem.error);
                 [self.loadingIndicatorView stopAnimating];
                 _playerState = SRVedioPlayerStateFailed;
-                [self releasePlayer];
+                [self destroyPlayer];
                 break;
             }
             case AVPlayerStatusUnknown:
@@ -507,15 +507,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     
     if (_player && _playerState == SRVideoPlayerStatePlaying) {
         [_player pause];
-    }
-    
-    [self releasePlayer];
-}
-
-- (void)releasePlayer {
-    
-    if (!_playerItem) {
-        return;
     }
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
