@@ -39,10 +39,10 @@
     self.title = @"SRVideoPlayer";
     
     [self.localBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.netBtn   setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.netBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 
     [self.localBtn setTitle:@"Local Video" forState:UIControlStateNormal];
-    [self.netBtn   setTitle:@"Net Video"   forState:UIControlStateNormal];
+    [self.netBtn setTitle:@"Network Video" forState:UIControlStateNormal];
 }
 
 @end
