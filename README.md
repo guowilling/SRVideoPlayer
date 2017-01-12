@@ -53,7 +53,7 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 
 ## Next
 
-* Cache video data while downloading, next time play directly with local data, do not have to download again.
+> Cache video data while downloading, next time play directly with local data, do not have to download again.
 
 **If you have any question, please issue or contact me.**   
 **If this repo helps you, please give it a star, thanks a lot.**  

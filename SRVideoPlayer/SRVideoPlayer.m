@@ -439,6 +439,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 - (void)replayAction {
     
+    //[self.player seekToTime:kCMTimeZero];
     [self seekToTimeWithSeconds:0];
     
     self.topBar.hidden    = NO;
