@@ -1,5 +1,5 @@
 //
-//  SRVideoProgressView.h
+//  SRVideoOperationTip.h
 //  SRVideoPlayerDemo
 //
 //  Created by 郭伟林 on 17/1/5.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SRVideoProgressOperationTip : UIView
+@interface SRVideoOperationTip : UIView
 
 @property (nonatomic, strong) UIImageView *tipImageView;
 @property (nonatomic, strong) UILabel     *tipLabel;

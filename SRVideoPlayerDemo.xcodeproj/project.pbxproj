@@ -29,7 +29,7 @@
 		687B0B681E1BCC550038E9D4 /* SRVideoBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B601E1BCC550038E9D4 /* SRVideoBottomBar.m */; };
 		687B0B691E1BCC550038E9D4 /* SRVideoLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B621E1BCC550038E9D4 /* SRVideoLayerView.m */; };
 		687B0B6B1E1BCC550038E9D4 /* SRVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B651E1BCC550038E9D4 /* SRVideoPlayer.m */; };
-		687B0B6C1E1BCC550038E9D4 /* SRVideoProgressOperationTip.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B671E1BCC550038E9D4 /* SRVideoProgressOperationTip.m */; };
+		687B0B6C1E1BCC550038E9D4 /* SRVideoOperationTip.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B671E1BCC550038E9D4 /* SRVideoOperationTip.m */; };
 		68AF545D1E1F98CA000A6E97 /* SRVideoTopBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */; };
 		68AF545F1E1F995D000A6E97 /* 好好(你的名字).mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 68AF545E1E1F995D000A6E97 /* 好好(你的名字).mp4 */; };
 		68AF54611E232D1B000A6E97 /* SRVideoPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 68AF54601E232D1B000A6E97 /* SRVideoPlayer.bundle */; };
@@ -102,8 +102,8 @@
 		687B0B621E1BCC550038E9D4 /* SRVideoLayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoLayerView.m; sourceTree = "<group>"; };
 		687B0B641E1BCC550038E9D4 /* SRVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoPlayer.h; sourceTree = "<group>"; };
 		687B0B651E1BCC550038E9D4 /* SRVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoPlayer.m; sourceTree = "<group>"; };
-		687B0B661E1BCC550038E9D4 /* SRVideoProgressOperationTip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoProgressOperationTip.h; sourceTree = "<group>"; };
-		687B0B671E1BCC550038E9D4 /* SRVideoProgressOperationTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoProgressOperationTip.m; sourceTree = "<group>"; };
+		687B0B661E1BCC550038E9D4 /* SRVideoOperationTip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoOperationTip.h; sourceTree = "<group>"; };
+		687B0B671E1BCC550038E9D4 /* SRVideoOperationTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoOperationTip.m; sourceTree = "<group>"; };
 		68AF545B1E1F98CA000A6E97 /* SRVideoTopBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoTopBar.h; sourceTree = "<group>"; };
 		68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoTopBar.m; sourceTree = "<group>"; };
 		68AF545E1E1F995D000A6E97 /* 好好(你的名字).mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "好好(你的名字).mp4"; sourceTree = "<group>"; };
@@ -165,10 +165,6 @@
 				6878ACC41E1B528200332891 /* ViewController.m */,
 				6878AD221E1B572700332891 /* VideoViewController.h */,
 				6878AD231E1B572700332891 /* VideoViewController.m */,
-				6878ACC61E1B528200332891 /* Main.storyboard */,
-				6878ACC91E1B528200332891 /* Assets.xcassets */,
-				6878ACCB1E1B528200332891 /* LaunchScreen.storyboard */,
-				6878ACCE1E1B528200332891 /* Info.plist */,
 				6878ACBD1E1B528200332891 /* Supporting Files */,
 			);
 			path = SRVideoPlayerDemo;
@@ -180,6 +176,10 @@
 				68AF545E1E1F995D000A6E97 /* 好好(你的名字).mp4 */,
 				6878ACFE1E1B54CF00332891 /* Masonry */,
 				6878ACBE1E1B528200332891 /* main.m */,
+				6878ACC61E1B528200332891 /* Main.storyboard */,
+				6878ACC91E1B528200332891 /* Assets.xcassets */,
+				6878ACCB1E1B528200332891 /* LaunchScreen.storyboard */,
+				6878ACCE1E1B528200332891 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -243,8 +243,8 @@
 				68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */,
 				687B0B5F1E1BCC550038E9D4 /* SRVideoBottomBar.h */,
 				687B0B601E1BCC550038E9D4 /* SRVideoBottomBar.m */,
-				687B0B661E1BCC550038E9D4 /* SRVideoProgressOperationTip.h */,
-				687B0B671E1BCC550038E9D4 /* SRVideoProgressOperationTip.m */,
+				687B0B661E1BCC550038E9D4 /* SRVideoOperationTip.h */,
+				687B0B671E1BCC550038E9D4 /* SRVideoOperationTip.m */,
 				687B0B611E1BCC550038E9D4 /* SRVideoLayerView.h */,
 				687B0B621E1BCC550038E9D4 /* SRVideoLayerView.m */,
 				68AF54601E232D1B000A6E97 /* SRVideoPlayer.bundle */,
@@ -396,7 +396,7 @@
 				6878AD1E1E1B54CF00332891 /* NSArray+MASAdditions.m in Sources */,
 				687B0B681E1BCC550038E9D4 /* SRVideoBottomBar.m in Sources */,
 				6878AD1D1E1B54CF00332891 /* MASViewConstraint.m in Sources */,
-				687B0B6C1E1BCC550038E9D4 /* SRVideoProgressOperationTip.m in Sources */,
+				687B0B6C1E1BCC550038E9D4 /* SRVideoOperationTip.m in Sources */,
 				6878AD1B1E1B54CF00332891 /* MASLayoutConstraint.m in Sources */,
 				6878ACC51E1B528200332891 /* ViewController.m in Sources */,
 				687B0B6B1E1BCC550038E9D4 /* SRVideoPlayer.m in Sources */,

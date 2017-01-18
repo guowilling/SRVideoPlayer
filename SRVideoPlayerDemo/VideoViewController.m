@@ -23,15 +23,18 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    {
-        UIView *playerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width)];
-        playerView.center = self.view.center;
-        [self.view addSubview:playerView];
-        _videoPlayer = [SRVideoPlayer playerWithVideoURL:_videoURL playerView:playerView playerSuperView:playerView.superview];
-        _videoPlayer.videoName = @"Here Is The Video Name";
-        _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
-        [_videoPlayer play];
-    }
+    [self showVideoPlayer];
+}
+
+- (void)showVideoPlayer {
+    
+    UIView *playerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width)];
+    playerView.center = self.view.center;
+    [self.view addSubview:playerView];
+    _videoPlayer = [SRVideoPlayer playerWithVideoURL:_videoURL playerView:playerView playerSuperView:playerView.superview];
+    _videoPlayer.videoName = @"Here Is The Video Name";
+    _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
+    [_videoPlayer play];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

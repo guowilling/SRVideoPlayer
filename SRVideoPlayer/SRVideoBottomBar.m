@@ -64,7 +64,7 @@
     if (!_videoProgressSlider) {
         _videoProgressSlider = [[UISlider alloc] init];
         _videoProgressSlider.minimumTrackTintColor = [UIColor whiteColor];
-        _videoProgressSlider.maximumTrackTintColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        _videoProgressSlider.maximumTrackTintColor = [UIColor colorWithWhite:0 alpha:0.5];
         [_videoProgressSlider setThumbImage:[UIImage imageNamed:SRVideoPlayerImageName(@"dot")] forState:UIControlStateNormal];
         [_videoProgressSlider addTarget:self action:@selector(sliderChanging:) forControlEvents:UIControlEventValueChanged];
         [_videoProgressSlider addTarget:self action:@selector(sliderDidEndChange:) forControlEvents:UIControlEventTouchUpInside];
@@ -81,7 +81,7 @@
     
     if (!_videoCacheProgress) {
         _videoCacheProgress = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-        _videoCacheProgress.progressTintColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.75];
+        _videoCacheProgress.progressTintColor = [UIColor colorWithWhite:1 alpha:0.75];
         _videoCacheProgress.trackTintColor = [UIColor clearColor];
         _videoCacheProgress.layer.cornerRadius = 0.5;
         _videoCacheProgress.layer.masksToBounds = YES;

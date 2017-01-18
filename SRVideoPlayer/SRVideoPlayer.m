@@ -11,7 +11,7 @@
 #import "Masonry.h"
 #import "SRVideoPlayer.h"
 #import "SRVideoLayerView.h"
-#import "SRVideoProgressOperationTip.h"
+#import "SRVideoOperationTip.h"
 #import "SRVideoTopBar.h"
 #import "SRVideoBottomBar.h"
 
@@ -57,7 +57,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 @property (nonatomic, strong) SRVideoTopBar *topBar;
 @property (nonatomic, strong) SRVideoBottomBar *bottomBar;
-@property (nonatomic, strong) SRVideoProgressOperationTip *videoProgressOperationTip;
+@property (nonatomic, strong) SRVideoOperationTip *videoOperationTip;
 
 @property (nonatomic, assign) BOOL isFullScreen;
 @property (nonatomic, assign) BOOL isDragingSlider;
@@ -75,6 +75,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 - (void)dealloc {
     
     [self destroyPlayer];
+    
+    NSLog(@"%s", __func__);
 }
 
 #pragma mark - Lazy Load
@@ -153,14 +155,14 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     return _volumeSlider;
 }
 
-- (SRVideoProgressOperationTip *)videoProgressOperationTip {
+- (SRVideoOperationTip *)videoOperationTip {
     
-    if (!_videoProgressOperationTip) {
-        _videoProgressOperationTip = [[SRVideoProgressOperationTip alloc] init];
-        _videoProgressOperationTip.hidden = YES;
-        _videoProgressOperationTip.layer.cornerRadius = 10.0;
+    if (!_videoOperationTip) {
+        _videoOperationTip = [[SRVideoOperationTip alloc] init];
+        _videoOperationTip.hidden = YES;
+        _videoOperationTip.layer.cornerRadius = 10.0;
     }
-    return _videoProgressOperationTip;
+    return _videoOperationTip;
 }
 
 - (UIButton *)replayBtn {
@@ -269,8 +271,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         make.bottom.equalTo(weakSelf.videoLayerView).offset(-44);
     }];
     
-    [_playerView addSubview:self.videoProgressOperationTip];
-    [self.videoProgressOperationTip mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_playerView addSubview:self.videoOperationTip];
+    [self.videoOperationTip mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(weakSelf.playerView);
         make.width.equalTo(@(120));
         make.height.equalTo(@60);
@@ -730,13 +732,13 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         if (_controlType == SRControlTypeProgress) {
             float videoCurrentTime = [self videoCurrentTimeWithTouchPoint:touchPoint];
             if (videoCurrentTime > _touchBeginVideoValue) {
-                self.videoProgressOperationTip.tipImageView.image = [UIImage imageNamed:SRVideoPlayerImageName(@"progress_right")];
+                self.videoOperationTip.tipImageView.image = [UIImage imageNamed:SRVideoPlayerImageName(@"progress_right")];
             } else if(videoCurrentTime < _touchBeginVideoValue) {
-                self.videoProgressOperationTip.tipImageView.image = [UIImage imageNamed:SRVideoPlayerImageName(@"progress_left")];
+                self.videoOperationTip.tipImageView.image = [UIImage imageNamed:SRVideoPlayerImageName(@"progress_left")];
             }
             
-            self.videoProgressOperationTip.hidden = NO;
-            self.videoProgressOperationTip.tipLabel.text = [NSString stringWithFormat:@"%@/%@", [self formatTimeWith:(long)videoCurrentTime], self.bottomBar.totalTimeLabel.text];
+            self.videoOperationTip.hidden = NO;
+            self.videoOperationTip.tipLabel.text = [NSString stringWithFormat:@"%@/%@", [self formatTimeWith:(long)videoCurrentTime], self.bottomBar.totalTimeLabel.text];
             
         } else if (_controlType == SRControlTypeVoice) {
             float voiceValue = _touchBeginVoiceValue - ((touchPoint.y - _touchBeginPoint.y) / CGRectGetHeight(pan.view.frame));
@@ -763,7 +765,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     if (pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled) {
         _controlHasJudged = NO;
         if (_moved && _controlType == SRControlTypeProgress) {
-            self.videoProgressOperationTip.hidden = YES;
+            self.videoOperationTip.hidden = YES;
             [self seekToTimeWithSeconds:[self videoCurrentTimeWithTouchPoint:touchPoint]];
             [self.bottomBar.playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"pause")] forState:UIControlStateNormal];
         }

@@ -1,17 +1,17 @@
 //
-//  SRVideoProgressView.m
+//  SRVideoOperationTip.m
 //  SRVideoPlayerDemo
 //
 //  Created by 郭伟林 on 17/1/5.
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
-#import "SRVideoProgressOperationTip.h"
+#import "SRVideoOperationTip.h"
 #import "Masonry.h"
 
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
-@implementation SRVideoProgressOperationTip
+@implementation SRVideoOperationTip
 
 - (UIImageView *)tipImageView {
     

@@ -22,12 +22,16 @@
 
 @interface ViewController ()
 
-@property (weak, nonatomic) IBOutlet UIButton *localBtn;
-@property (weak, nonatomic) IBOutlet UIButton *netBtn;
-
 @end
 
 @implementation ViewController
+
+- (void)viewDidLoad {
+    
+    [super viewDidLoad];
+    
+    self.title = @"SRVideoPlayer";
+}
 
 - (IBAction)localBtnAction {
     
@@ -36,24 +40,11 @@
     [self.navigationController pushViewController:videoVC animated:YES];
 }
 
-- (IBAction)netBtnAction {
+- (IBAction)networkBtnAction {
     
     VideoViewController *videoVC = [[VideoViewController alloc] init];
     videoVC.videoURL = [NSURL URLWithString:@"http://baobab.wdjcdn.com/1442142801331138639111.mp4"];
     [self.navigationController pushViewController:videoVC animated:YES];
-}
-
-- (void)viewDidLoad {
-    
-    [super viewDidLoad];
-    
-    self.title = @"SRVideoPlayer";
-    
-    [self.localBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.netBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-
-    [self.localBtn setTitle:@"Local Video" forState:UIControlStateNormal];
-    [self.netBtn setTitle:@"Network Video" forState:UIControlStateNormal];
 }
 
 @end
