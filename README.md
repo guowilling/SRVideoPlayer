@@ -8,13 +8,17 @@
 
 ***
 
-* 自定义播放界面, 提供播放 暂停 暂停 快进 快退等功能.
+* 自定义播放界面, 提供播放 暂停 全屏 快进 快退等功能.
 * 上下滑动屏幕左边调整亮度, 上下滑动屏幕右边调整音量.
 * 左右滑动屏幕控制播放进度.
 
 ## Show pictures
 
-![image](./show0.gif) ![image](./show1.png)
+![image](./show.gif)   
+
+***
+
+![image](./show.png)
 
 ## Usage
 
@@ -49,7 +53,7 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 @property (nonatomic, copy) NSString *videoName;
 ````
 
-## Next
+## TODO
 
 > Cache video data while downloading, next time play directly with local data, do not have to download again.   
 > 边下边缓存功能, 下一次播放的时候, 直接使用缓存数据不用再次下载.
