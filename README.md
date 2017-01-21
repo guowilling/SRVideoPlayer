@@ -2,17 +2,19 @@
 
 ## Features
 
-* Custom video interface. providing play, pause, full-screen and other functions. providing play progress bar, load progress bar etc.
+* Custom play interface. providing play, pause, full-screen and other functions. providing play progress bar, load progress bar etc.
 * Slide left of the screen up or down to adjust the brightness. Slide right of the screen up or down to adjust the sound.
 * Slide the screen left or right to adjust the play progress.
 
+***
+
+* 自定义播放界面, 提供播放 暂停 暂停 快进 快退等功能.
+* 上下滑动屏幕左边调整亮度, 上下滑动屏幕右边调整音量.
+* 左右滑动屏幕控制播放进度.
 
 ## Show pictures
 
-![image](./show0.gif)   
-
-![image](./show1.png)
-![image](./show2.png)
+![image](./show0.gif) ![image](./show1.png)
 
 ## Usage
 
@@ -40,20 +42,17 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 ## Custom Settings
 
 ````objc
-/**
- Action when video play to end, default is SRVideoPlayerEndActionStop.
- */
+/** Action when video play to end, default is SRVideoPlayerEndActionStop. */
 @property (nonatomic, assign) SRVideoPlayerEndAction playerEndAction;
 
-/**
- The name of the video which will play.
- */
+/** The name of the video which will play. */
 @property (nonatomic, copy) NSString *videoName;
 ````
 
 ## Next
 
-> Cache video data while downloading, next time play directly with local data, do not have to download again.
+> Cache video data while downloading, next time play directly with local data, do not have to download again.   
+> 边下边缓存功能, 下一次播放的时候, 直接使用缓存数据不用再次下载.
 
 **If you have any question, please issue or contact me.**   
 **If this repo helps you, please give it a star, thanks a lot.**  
