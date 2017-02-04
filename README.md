@@ -56,7 +56,7 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 ## TODO
 
 > Cache video data while downloading, next time play directly with local data, do not have to download again.   
-> 边下边缓存功能, 下一次播放的时候, 直接使用缓存数据不用再次下载.
+> 边下边缓存功能, 下次播放的时候, 直接使用缓存数据不用再次下载.
 
 **If you have any question, please issue or contact me.**   
 **If this repo helps you, please give it a star, thanks a lot.**  
