@@ -14,11 +14,14 @@
 
 ## Show pictures
 
-![image](./show.gif)   
-
-***
-
+![image](./show.gif)
 ![image](./show.png)
+
+### CocoaPods
+> Add **pod 'SRVideoPlayer'** to the Podfile, then run **pod install** in the terminal.
+
+### Manual
+> Drag the **SRVideoPlayer** folder to the project.(Note: if the project has already import Masonry, you should remove it which in the SRVideoPlayer folder)
 
 ## Usage
 
@@ -46,10 +49,14 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 ## Custom Settings
 
 ````objc
-/** Action when video play to end, default is SRVideoPlayerEndActionStop. */
+/** 
+ Action when video play to end, default is SRVideoPlayerEndActionStop. 
+ */
 @property (nonatomic, assign) SRVideoPlayerEndAction playerEndAction;
 
-/** The name of the video which will play. */
+/** 
+ The name of the video which will play. 
+ */
 @property (nonatomic, copy) NSString *videoName;
 ````
 
@@ -58,6 +65,6 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 > Cache video data while downloading, next time play directly with local data, do not have to download again.   
 > 边下边缓存功能, 下次播放的时候, 直接使用缓存数据不用再次下载.
 
-**If you have any question, please issue or contact me.**   
+**If you have any question, submit an issue or contact me.**   
 **If this repo helps you, please give it a star, thanks a lot.**  
 **Have Fun.**
