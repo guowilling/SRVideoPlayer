@@ -15,7 +15,6 @@
 ## Show pictures
 
 ![image](./show.gif)
-![image](./show.png)
 
 ### CocoaPods
 > Add **pod 'SRVideoPlayer'** to the Podfile, then run **pod install** in the terminal.
@@ -62,8 +61,7 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 
 ## TODO
 
-> Cache video data while downloading, next time play directly with local data, do not have to download again.   
-> 边下边缓存功能, 下次播放的时候, 直接使用缓存数据不用再次下载.
+> Cache video data while downloading, next time play directly with local data, do not have to download again.
 
 **If you have any question, submit an issue or contact me.**   
 **If this repo helps you, please give it a star, thanks a lot.**  
