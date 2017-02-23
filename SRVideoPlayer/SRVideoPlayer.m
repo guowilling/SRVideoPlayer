@@ -32,12 +32,19 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 @property (nonatomic, strong) NSURL *videoURL;
 
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
+@property (nonatomic, strong) UIView *touchView;
+
 @property (nonatomic, assign, readwrite) SRVideoPlayerState playerState;
 @property (nonatomic, assign) UIInterfaceOrientation currentOrientation;
 
 @property (nonatomic, assign) BOOL moved;
 @property (nonatomic, assign) BOOL controlHasJudged;
 @property (nonatomic, assign) SRControlType controlType;
+
+@property (nonatomic, assign) BOOL isFullScreen;
+@property (nonatomic, assign) BOOL isDragingSlider;
+@property (nonatomic, assign) BOOL isManualPaused;
 
 @property (nonatomic, assign) CGPoint touchBeginPoint;
 @property (nonatomic, assign) CGFloat touchBeginVideoValue;
@@ -46,27 +53,20 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 @property (nonatomic, assign) CGFloat videoDuration;
 @property (nonatomic, assign) CGFloat videoCurrent;
 
-@property (nonatomic, strong) AVPlayer     *player;
+@property (nonatomic, strong) AVPlayer *player;
 @property (nonatomic, strong) AVPlayerItem *playerItem;
-@property (nonatomic, strong) NSObject     *playbackTimeObserver;
+@property (nonatomic, strong) NSObject *playbackTimeObserver;
 
-@property (nonatomic, weak  ) UIView           *playerView;
-@property (nonatomic, weak  ) UIView           *playerSuperView;
-@property (nonatomic, assign) CGRect            playerViewOriginalRect;
+@property (nonatomic, weak  ) UIView *playerView;
+@property (nonatomic, weak  ) UIView *playerSuperView;
+@property (nonatomic, assign) CGRect  playerViewOriginalRect;
 @property (nonatomic, strong) SRVideoLayerView *videoLayerView;
 
 @property (nonatomic, strong) SRVideoTopBar *topBar;
 @property (nonatomic, strong) SRVideoBottomBar *bottomBar;
 @property (nonatomic, strong) SRVideoOperationTip *videoOperationTip;
-
-@property (nonatomic, assign) BOOL isFullScreen;
-@property (nonatomic, assign) BOOL isDragingSlider;
-@property (nonatomic, assign) BOOL isManualPaused;
-
-@property (nonatomic, strong) UIActivityIndicatorView *loadingIndicatorView;
-@property (nonatomic, strong) UISlider                *volumeSlider;
-@property (nonatomic, strong) UIView                  *touchView;
-@property (nonatomic, strong) UIButton                *replayBtn;
+@property (nonatomic, strong) UISlider *volumeSlider;
+@property (nonatomic, strong) UIButton *replayBtn;
 
 @end
 
@@ -108,12 +108,12 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     return _bottomBar;
 }
 
-- (UIActivityIndicatorView *)loadingIndicatorView {
+- (UIActivityIndicatorView *)activityIndicatorView {
     
-    if (!_loadingIndicatorView) {
-        _loadingIndicatorView = [[UIActivityIndicatorView alloc] init];
+    if (!_activityIndicatorView) {
+        _activityIndicatorView = [[UIActivityIndicatorView alloc] init];
     }
-    return _loadingIndicatorView;
+    return _activityIndicatorView;
 }
 
 - (UIView *)touchView {
@@ -255,8 +255,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         make.height.mas_equalTo(44);
     }];
     
-    [_playerView addSubview:self.loadingIndicatorView];
-    [self.loadingIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_playerView addSubview:self.activityIndicatorView];
+    [self.activityIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(weakSelf.videoLayerView);
         make.centerY.equalTo(weakSelf.videoLayerView);
         make.width.mas_equalTo(44);
@@ -343,7 +343,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                 self.bottomBar.userInteractionEnabled = YES;
                 self.touchView.userInteractionEnabled = YES; // Prevents the crash that caused by draging before the video has not successfully load.
                 
-                [self.loadingIndicatorView stopAnimating];
+                [self.activityIndicatorView stopAnimating];
                 
                 [self.player play];
                 _playerState = SRVideoPlayerStatePlaying;
@@ -360,8 +360,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                         return;
                     }
                     
-                    if (strongSelf.loadingIndicatorView.isAnimating) {
-                        [strongSelf.loadingIndicatorView stopAnimating];
+                    if (strongSelf.activityIndicatorView.isAnimating) {
+                        [strongSelf.activityIndicatorView stopAnimating];
                     }
                     
                     if (!strongSelf.isManualPaused) {
@@ -386,7 +386,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                 // Loading video error which usually a resource issue.
                 NSLog(@"AVPlayerStatusFailed player: %@", _player.error);
                 NSLog(@"AVPlayerStatusFailed playerItem: %@", _playerItem.error);
-                [self.loadingIndicatorView stopAnimating];
+                [self.activityIndicatorView stopAnimating];
                 _playerState = SRVedioPlayerStateFailed;
                 [self destroyPlayer];
                 break;
@@ -471,7 +471,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidPlayToEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:_playerItem];
     
-    [self.loadingIndicatorView startAnimating];
+    [self.activityIndicatorView startAnimating];
 }
 
 - (void)pause {
@@ -558,7 +558,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         _playerState = SRVideoPlayerStatePlaying;
         if (!_playerItem.isPlaybackLikelyToKeepUp) {
             _playerState = SRVideoPlayerStateBuffering;
-            [self.loadingIndicatorView startAnimating];
+            [self.activityIndicatorView startAnimating];
         }
     }];
 }
@@ -732,14 +732,14 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         if (_controlType == SRControlTypeProgress) {
             float videoCurrentTime = [self videoCurrentTimeWithTouchPoint:touchPoint];
             if (videoCurrentTime > _touchBeginVideoValue) {
-                self.videoOperationTip.tipImageView.image = [UIImage imageNamed:SRVideoPlayerImageName(@"progress_right")];
+                [self.videoOperationTip setTipImageViewImage:[UIImage imageNamed:SRVideoPlayerImageName(@"progress_right")]];
             } else if(videoCurrentTime < _touchBeginVideoValue) {
-                self.videoOperationTip.tipImageView.image = [UIImage imageNamed:SRVideoPlayerImageName(@"progress_left")];
+                [self.videoOperationTip setTipImageViewImage:[UIImage imageNamed:SRVideoPlayerImageName(@"progress_left")]];
             }
             
             self.videoOperationTip.hidden = NO;
-            self.videoOperationTip.tipLabel.text = [NSString stringWithFormat:@"%@/%@", [self formatTimeWith:(long)videoCurrentTime], self.bottomBar.totalTimeLabel.text];
-            
+            [self.videoOperationTip setTipLabelText:[NSString stringWithFormat:@"%@ / %@", [self formatTimeWith:(long)videoCurrentTime], self.bottomBar.totalTimeLabel.text]];
+
         } else if (_controlType == SRControlTypeVoice) {
             float voiceValue = _touchBeginVoiceValue - ((touchPoint.y - _touchBeginPoint.y) / CGRectGetHeight(pan.view.frame));
             if (voiceValue < 0) {

@@ -22,14 +22,14 @@
 
 @property (nonatomic, weak) id<SRVideoBottomBarDelegate> delegate;
 
-@property (nonatomic, strong) UIButton       *playPauseBtn;
-@property (nonatomic, strong) UIButton       *changeScreenBtn;
+@property (nonatomic, strong) UIButton *playPauseBtn;
+@property (nonatomic, strong) UIButton *changeScreenBtn;
 
-@property (nonatomic, strong) UILabel        *currentTimeLabel;
-@property (nonatomic, strong) UILabel        *totalTimeLabel;
+@property (nonatomic, strong) UILabel *currentTimeLabel;
+@property (nonatomic, strong) UILabel *totalTimeLabel;
 
-@property (nonatomic, strong) UISlider       *videoProgressSlider;
 @property (nonatomic, strong) UIProgressView *videoCacheProgress;
+@property (nonatomic, strong) UISlider *videoProgressSlider;
 
 + (instancetype)videoBottomBar;
 

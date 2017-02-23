@@ -10,7 +10,8 @@
 
 @interface SRVideoOperationTip : UIView
 
-@property (nonatomic, strong) UIImageView *tipImageView;
-@property (nonatomic, strong) UILabel     *tipLabel;
+- (void)setTipImageViewImage:(UIImage *)image;
+
+- (void)setTipLabelText:(NSString *)text;
 
 @end

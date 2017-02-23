@@ -12,9 +12,11 @@
 * 上下滑动屏幕左边调整亮度, 上下滑动屏幕右边调整音量.
 * 左右滑动屏幕控制播放进度.
 
-## Show pictures
+## Show
 
 ![image](./show.gif)
+
+## Installation
 
 ### CocoaPods
 > Add **pod 'SRVideoPlayer'** to the Podfile, then run **pod install** in the terminal.

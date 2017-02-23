@@ -6,8 +6,8 @@
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
-#import "SRVideoPlayer.h"
 #import "VideoViewController.h"
+#import "SRVideoPlayer.h"
 
 @interface VideoViewController ()
 

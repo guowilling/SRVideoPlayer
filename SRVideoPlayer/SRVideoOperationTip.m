@@ -11,6 +11,14 @@
 
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
+@interface SRVideoOperationTip ()
+
+@property (nonatomic, strong) UIImageView *tipImageView;
+
+@property (nonatomic, strong) UILabel *tipLabel;
+
+@end
+
 @implementation SRVideoOperationTip
 
 - (UIImageView *)tipImageView {
@@ -56,6 +64,16 @@
         }];
     }
     return self;
+}
+
+- (void)setTipImageViewImage:(UIImage *)image {
+    
+    self.tipImageView.image = image;
+}
+
+- (void)setTipLabelText:(NSString *)text {
+    
+    self.tipLabel.text = text;
 }
 
 @end

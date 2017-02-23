@@ -11,10 +11,6 @@
 
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
-@interface SRVideoBottomBar ()
-
-@end
-
 @implementation SRVideoBottomBar
 
 - (UIButton *)playPauseBtn {
