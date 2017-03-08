@@ -14,7 +14,11 @@
 
 ## Show
 
-![image](./show.gif)
+![image](./show1.png) ![image](./show2.png)  
+  
+***
+
+![image](./show3.png) ![image](./show4.png)
 
 ## Installation
 
@@ -66,5 +70,5 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 > Cache video data while downloading, next time play directly with local data, do not have to download again.
 
 **If you have any question, submit an issue or contact me.**   
-**If this repo helps you, please give it a star, thanks a lot.**  
+**If this repo helped you, please give it a star, thanks a lot.**  
 **Have Fun.**
