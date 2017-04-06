@@ -15,6 +15,7 @@
 #import "SRVideoTopBar.h"
 #import "SRVideoBottomBar.h"
 #import "SRBrightnessView.h"
+#import "SRVideoDownloader.h"
 
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
@@ -29,7 +30,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     SRControlTypeNone = 999
 };
 
-@interface SRVideoPlayer() <UIGestureRecognizerDelegate, SRVideoTopBarBarDelegate, SRVideoBottomBarDelegate>
+@interface SRVideoPlayer() <UIGestureRecognizerDelegate, SRVideoTopBarBarDelegate, SRVideoBottomBarDelegate, SRVideoDownloaderDelegate>
 
 @property (nonatomic, strong) NSURL *videoURL;
 
@@ -461,6 +462,16 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         return;
     }
     
+    if ([_videoURL.absoluteString containsString:@"http"] || [_videoURL.absoluteString containsString:@"https"]) {
+        [SRVideoDownloader sharedDownloader].delegate = self;
+        [[SRVideoDownloader sharedDownloader] downloadVideoOfURL:_videoURL];
+    } else {
+        [self playVideo];
+    }
+}
+
+- (void)playVideo {
+    
     _playerItem = [AVPlayerItem playerItemWithURL:_videoURL];
     _player = [AVPlayer playerWithPlayerItem:_playerItem];
     [(AVPlayerLayer *)self.videoLayerView.layer setPlayer:_player];
@@ -529,6 +540,19 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [_playerView removeFromSuperview];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+}
+
+#pragma mark - SRVideoDownloaderDelegate
+
+- (void)notFindCacheVideoFile {
+    
+    [self playVideo];
+}
+
+- (void)didFindCacheVideoFilePath:(NSString *)filePath {
+    
+    _videoURL = [NSURL fileURLWithPath:filePath];
+    [self playVideo];
 }
 
 #pragma mark - Assist Methods
@@ -786,6 +810,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 - (void)videoTopBarDidClickCloseBtn {
     
     [self destroyPlayer];
+    
+    [[SRVideoDownloader sharedDownloader] cancelDownloadAction];
 }
 
 #pragma mark - SRVideoBottomBarDelegate
