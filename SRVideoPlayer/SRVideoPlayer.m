@@ -14,6 +14,7 @@
 #import "SRVideoOperationTip.h"
 #import "SRVideoTopBar.h"
 #import "SRVideoBottomBar.h"
+#import "SRBrightnessView.h"
 
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
@@ -65,6 +66,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 @property (nonatomic, strong) SRVideoTopBar *topBar;
 @property (nonatomic, strong) SRVideoBottomBar *bottomBar;
 @property (nonatomic, strong) SRVideoOperationTip *videoOperationTip;
+@property (nonatomic, strong) MPVolumeView *volumeView;
 @property (nonatomic, strong) UISlider *volumeSlider;
 @property (nonatomic, strong) UIButton *replayBtn;
 
@@ -122,37 +124,33 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         _touchView = [[UIView alloc] init];
         _touchView.backgroundColor = [UIColor clearColor];
         
-        {
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchViewTapAction:)];
-            tap.delegate = self;
-            [_touchView addGestureRecognizer:tap];
-        }
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchViewTapAction:)];
+        tap.delegate = self;
+        [_touchView addGestureRecognizer:tap];
         
-        {
-            UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(touchViewPanAction:)];
-            pan.delegate = self;
-            [_touchView addGestureRecognizer:pan];
-        }
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(touchViewPanAction:)];
+        pan.delegate = self;
+        [_touchView addGestureRecognizer:pan];
         
         _touchView.userInteractionEnabled = NO;
     }
     return _touchView;
 }
 
-- (UISlider *)volumeSlider {
+- (MPVolumeView *)volumeView {
     
-    if (!_volumeSlider) {
-        MPVolumeView *volumeView = [[MPVolumeView alloc] init];
-        volumeView.showsRouteButton = NO;
-        volumeView.showsVolumeSlider = NO;
-        for (UIView *view in volumeView.subviews) {
+    if (!_volumeView) {
+        _volumeView = [[MPVolumeView alloc] init];
+        _volumeView.showsRouteButton = NO;
+        _volumeView.showsVolumeSlider = NO;
+        for (UIView *view in _volumeView.subviews) {
             if ([NSStringFromClass(view.class) isEqualToString:@"MPVolumeSlider"]) {
                 _volumeSlider = (UISlider *)view;
                 break;
             }
         }
     }
-    return _volumeSlider;
+    return _volumeView;
 }
 
 - (SRVideoOperationTip *)videoOperationTip {
@@ -199,6 +197,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         [self setupUIConstraints];
         
         [self setupCurrentOrientation];
+        
+        [SRBrightnessView brightnessView];
     }
     return self;
 }
@@ -282,6 +282,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [self.replayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(weakSelf.playerView);
     }];
+    
+    [_playerView addSubview:self.volumeView];
 }
 
 #pragma mark - Notification Observers
@@ -608,33 +610,38 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         return;
     }
     _currentOrientation = orientation;
-    
-    if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) {
-        [_playerView removeFromSuperview];
-        [_playerSuperView addSubview:_playerView];
-        __weak typeof(self) weakSelf = self;
-        [_playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(CGRectGetMinY(weakSelf.playerViewOriginalRect));
-            make.left.mas_equalTo(CGRectGetMinX(weakSelf.playerViewOriginalRect));
-            make.width.mas_equalTo(CGRectGetWidth(weakSelf.playerViewOriginalRect));
-            make.height.mas_equalTo(CGRectGetHeight(weakSelf.playerViewOriginalRect));
-        }];
-        
-        [_bottomBar.changeScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"full_screen")] forState:UIControlStateNormal];
+    [_playerView removeFromSuperview];
+    switch (orientation) {
+        case UIInterfaceOrientationPortrait:
+        case UIInterfaceOrientationPortraitUpsideDown:
+        {
+            [_playerSuperView addSubview:_playerView];
+            __weak typeof(self) weakSelf = self;
+            [_playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(CGRectGetMinY(weakSelf.playerViewOriginalRect));
+                make.left.mas_equalTo(CGRectGetMinX(weakSelf.playerViewOriginalRect));
+                make.width.mas_equalTo(CGRectGetWidth(weakSelf.playerViewOriginalRect));
+                make.height.mas_equalTo(CGRectGetHeight(weakSelf.playerViewOriginalRect));
+            }];
+            [_bottomBar.changeScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"full_screen")] forState:UIControlStateNormal];
+        }
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+        case UIInterfaceOrientationLandscapeRight:
+        {
+            [[UIApplication sharedApplication].keyWindow addSubview:_playerView];
+            [_playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.width.equalTo(@([UIScreen mainScreen].bounds.size.height));
+                make.height.equalTo(@([UIScreen mainScreen].bounds.size.width));
+                make.center.equalTo([UIApplication sharedApplication].keyWindow);
+            }];
+            [_bottomBar.changeScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"small_screen")] forState:UIControlStateNormal];
+        }
+            break;
+        default:
+            break;
     }
-    
-    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-        [_playerView removeFromSuperview];
-        [[UIApplication sharedApplication].keyWindow addSubview:_playerView];
-        [_playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.width.equalTo(@([UIScreen mainScreen].bounds.size.height));
-            make.height.equalTo(@([UIScreen mainScreen].bounds.size.width));
-            make.center.equalTo([UIApplication sharedApplication].keyWindow);
-        }];
-        
-        [_bottomBar.changeScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"small_screen")] forState:UIControlStateNormal];
-    }
-    
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[SRBrightnessView brightnessView]];
     [UIView animateWithDuration:0.5 animations:^{
         _playerView.transform = [self getTransformWithOrientation:orientation];
     }];
@@ -751,7 +758,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
             }
             
         } else if (_controlType == SRControlTypeLight) {
-            [UIScreen mainScreen].brightness -= ((touchPoint.y - _touchBeginPoint.y) / 10000);
+            [UIScreen mainScreen].brightness -= ((touchPoint.y - _touchBeginPoint.y) / 5000);
             
         } else if (_controlType == SRControlTypeNone) {
             if (self.bottomBar.hidden) {

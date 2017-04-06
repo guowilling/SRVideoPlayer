@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6815E1061E95F2220041AE85 /* SRBrightnessView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6815E1051E95F2220041AE85 /* SRBrightnessView.m */; };
 		6878ACBF1E1B528200332891 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6878ACBE1E1B528200332891 /* main.m */; };
 		6878ACC21E1B528200332891 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6878ACC11E1B528200332891 /* AppDelegate.m */; };
 		6878ACC51E1B528200332891 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6878ACC41E1B528200332891 /* ViewController.m */; };
@@ -53,6 +54,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6815E1041E95F2220041AE85 /* SRBrightnessView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRBrightnessView.h; sourceTree = "<group>"; };
+		6815E1051E95F2220041AE85 /* SRBrightnessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRBrightnessView.m; sourceTree = "<group>"; };
 		6878ACBA1E1B528200332891 /* SRVideoPlayerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SRVideoPlayerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6878ACBE1E1B528200332891 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6878ACC01E1B528200332891 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -212,6 +215,8 @@
 				687B0B601E1BCC550038E9D4 /* SRVideoBottomBar.m */,
 				687B0B661E1BCC550038E9D4 /* SRVideoOperationTip.h */,
 				687B0B671E1BCC550038E9D4 /* SRVideoOperationTip.m */,
+				6815E1041E95F2220041AE85 /* SRBrightnessView.h */,
+				6815E1051E95F2220041AE85 /* SRBrightnessView.m */,
 				687B0B611E1BCC550038E9D4 /* SRVideoLayerView.h */,
 				687B0B621E1BCC550038E9D4 /* SRVideoLayerView.m */,
 				68A0ADEF1E54060500A8BCEF /* Masonry */,
@@ -406,6 +411,7 @@
 				68A0AE101E54060500A8BCEF /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				6878ACC21E1B528200332891 /* AppDelegate.m in Sources */,
 				6878AD241E1B572700332891 /* VideoViewController.m in Sources */,
+				6815E1061E95F2220041AE85 /* SRBrightnessView.m in Sources */,
 				6878ACBF1E1B528200332891 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
