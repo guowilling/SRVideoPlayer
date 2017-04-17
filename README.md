@@ -98,6 +98,8 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 ### 2017.04.06
 > Cache video data while playing, next time play directly with local data, do not have to download again.
 
-**If you have any question, submit an issue or contact me.**   
-**If this repo helped you, please give it a star, thanks a lot.**  
-**Have Fun.**
+> **If you have any question, submit an issue or contact me.**   
+> **QQ: 1990991510**   
+> **Email: guowilling@qq.com**   
+> **If this repo helps you, please give it a star.**   
+> **Have Fun.**
