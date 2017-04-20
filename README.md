@@ -3,8 +3,9 @@
 ## Features
 
 * Support local and network video and automatically distinguish.
-* Custom play interface providing play、pause、full screen button and play progress、load progress bar etc.
-* Slide left or right half of the screen up or down to adjust brightness or sound, slide the screen left or right to seek play progress.
+* Custom play interface providing play、pause、full screen button and play progress、load progress bar.
+* Slide left or right half of the screen up or down to adjust brightness or sound.
+* Slide the screen left or right to seek play progress.
 * Cache video data while playing, next time play directly with local data, do not have to download again.
 
 ## Show
@@ -84,7 +85,7 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 
 ````
 
-## Significant updates
+## Significant Updates
 
 ### 2017.04.06
 > Cache video data while playing, next time play directly with local data, do not have to download again.
