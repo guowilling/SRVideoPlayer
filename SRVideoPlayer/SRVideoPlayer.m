@@ -223,7 +223,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
             break;
     }
     
-    // Need setting the app only support portrait orientation?
+    // Need setting the app only support portrait orientation.
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
@@ -362,20 +362,15 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                     if (weakSelf.isDragingSlider) {
                         return;
                     }
-                    
                     if (strongSelf.activityIndicatorView.isAnimating) {
                         [strongSelf.activityIndicatorView stopAnimating];
                     }
-                    
                     if (!strongSelf.isManualPaused) {
                         strongSelf.playerState = SRVideoPlayerStatePlaying;
                     }
-                    
                     CGFloat current = playerItem.currentTime.value / playerItem.currentTime.timescale;
                     strongSelf.bottomBar.currentTimeLabel.text = [strongSelf formatTimeWith:(long)ceil(current)];
-                    
                     [strongSelf.bottomBar.videoProgressSlider setValue:current animated:YES];
-                    
                     strongSelf.videoCurrent = current;
                     if (strongSelf.videoCurrent > strongSelf.videoDuration) {
                         strongSelf.videoCurrent = strongSelf.videoDuration;
@@ -383,7 +378,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                 }];
                 break;
             }
-                
+            
             case AVPlayerStatusFailed:
             {
                 // Loading video error which usually a resource issue.
@@ -871,8 +866,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 - (void)videoBottomBarDidEndChangeSlider:(UISlider *)slider {
     
+    // The delay is to prevent the sliding point from jumping.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // The delay is to prevent the sliding point from jumping.
         _isDragingSlider = NO;
     });
     

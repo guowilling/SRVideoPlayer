@@ -32,7 +32,7 @@
 - (IBAction)networkBtnAction {
     
     VideoViewController *videoVC = [[VideoViewController alloc] init];
-    videoVC.videoURL = [NSURL URLWithString:@"http://baobab.wdjcdn.com/1442142801331138639111.mp4"];
+    videoVC.videoURL = [NSURL URLWithString:@"http://yxfile.idealsee.com/9f6f64aca98f90b91d260555d3b41b97_mp4.mp4"];
     [self.navigationController pushViewController:videoVC animated:YES];
 }
 

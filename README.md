@@ -3,18 +3,9 @@
 ## Features
 
 * Support local and network video and automatically distinguish.
-* Custom play interface. providing play, pause, full-screen and other functions. providing play progress bar, load progress bar etc.
-* Slide left of the screen up or down to adjust the brightness. Slide right of the screen up or down to adjust the sound.
-* Slide the screen left or right to adjust the play progress.
+* Custom play interface providing play、pause、full screen button and play progress、load progress bar etc.
+* Slide left or right half of the screen up or down to adjust brightness or sound, slide the screen left or right to seek play progress.
 * Cache video data while playing, next time play directly with local data, do not have to download again.
-
-***
-
-* 支持本地和网络视频并且自动区分.
-* 自定义播放界面, 提供播放 暂停 全屏 快进 快退等功能.
-* 上下滑动屏幕左边调整亮度, 上下滑动屏幕右边调整音量.
-* 左右滑动屏幕控制播放进度.
-* 播放的同时缓存视频, 下次直接使用本地数据, 不必再次下载.
 
 ## Show
 
@@ -98,8 +89,14 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 ### 2017.04.06
 > Cache video data while playing, next time play directly with local data, do not have to download again.
 
-> **If you have any question, submit an issue or contact me.**   
-> **QQ: 1990991510**   
-> **Email: guowilling@qq.com**   
-> **If this repo helps you, please give it a star.**   
-> **Have Fun.**
+
+## More
+
+**If you have any questions, submit an issue or contact me.** 
+
+> [guowilling](https://github.com/guowilling)  
+> QQ: 1990991510  
+> Email: guowilling90@gmail.com
+
+**Have Fun.**
+

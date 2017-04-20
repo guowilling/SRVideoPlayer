@@ -50,7 +50,7 @@
         self.alpha = 0.0;
         
         {
-            // 通过 UIToolbar 实现毛玻璃效果, 简单粗暴.
+            // UIToolbar 毛玻璃效果.
             UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
             toolbar.alpha = 0.9;
             [self addSubview:toolbar];
