@@ -6,12 +6,12 @@
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
-#import "SRVideoOperationTip.h"
+#import "SRVideoProgressTip.h"
 #import "Masonry.h"
 
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
-@interface SRVideoOperationTip ()
+@interface SRVideoProgressTip ()
 
 @property (nonatomic, strong) UIImageView *tipImageView;
 
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation SRVideoOperationTip
+@implementation SRVideoProgressTip
 
 - (UIImageView *)tipImageView {
     
@@ -47,12 +47,14 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
         
+        __weak typeof(self) weakSelf = self;
+        
         [self addSubview:self.tipImageView];
         [self.tipImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(12.5);
             make.width.mas_equalTo(45);
             make.height.mas_equalTo(25);
-            make.centerX.equalTo(self);
+            make.centerX.equalTo(weakSelf);
         }];
 
         [self addSubview:self.tipLabel];
@@ -60,7 +62,7 @@
             make.top.equalTo(_tipImageView.mas_bottom);
             make.width.mas_equalTo(120);
             make.height.mas_equalTo(20);
-            make.centerX.equalTo(self);
+            make.centerX.equalTo(weakSelf);
         }];
     }
     return self;

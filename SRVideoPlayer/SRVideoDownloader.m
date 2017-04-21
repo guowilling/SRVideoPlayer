@@ -14,14 +14,14 @@
 
 @interface SRVideoDownloader () <NSURLSessionDataDelegate>
 
+@property (nonatomic, copy) NSString *tmpVideoPath;
+@property (nonatomic, copy) NSString *cacheVideoPath;
+
 @property (nonatomic, strong) NSURLSession *session;
 @property (nonatomic, strong) NSFileHandle *fileHandle;
 
 @property (nonatomic, assign) NSInteger downloadedLength;
-@property (nonatomic, assign) NSInteger expectedTotalLength;
-
-@property (nonatomic, copy) NSString *tmpVideoPath;
-@property (nonatomic, copy) NSString *cacheVideoPath;
+@property (nonatomic, assign) NSInteger expectedLength;
 
 @end
 
@@ -104,30 +104,30 @@
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
     NSDictionary *allHeaderFields = [httpResponse allHeaderFields];
     NSString *contentRange = [allHeaderFields valueForKey:@"Content-Range"];
-    _expectedTotalLength = [contentRange componentsSeparatedByString:@"/"].lastObject.integerValue; // response.expectedContentLength + _curruentLength;
+    _expectedLength = [contentRange componentsSeparatedByString:@"/"].lastObject.integerValue;
     completionHandler(NSURLSessionResponseAllow);
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
     
     [_fileHandle writeData:data];
-//    _downloadedLength += data.length;
-//    CGFloat progress = 1.0 * _downloadedLength / _expectedTotalLength;
-//    NSLog(@"progress: %.2f",progress);
+    _downloadedLength += data.length;
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     
     if (error) {
         NSLog(@"error: %@", error);
-    } else {
-        [[NSFileManager defaultManager] moveItemAtPath:self.tmpVideoPath toPath:self.cacheVideoPath error:nil];
+        return;
+    }
+    if ([[NSFileManager defaultManager] moveItemAtPath:self.tmpVideoPath toPath:self.cacheVideoPath error:nil]) {
+        NSLog(@"cacheVideoPath: %@", self.cacheVideoPath);
     }
 }
 
 #pragma mark - Public Methods
 
-- (void)cancelDownloadAction {
+- (void)cancelDownloadActions {
     
     [self.session invalidateAndCancel];
     [self setSession:nil];

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SRVideoOperationTip : UIView
+@interface SRVideoProgressTip : UIView
 
 - (void)setTipImageViewImage:(UIImage *)image;
 

@@ -34,12 +34,12 @@ typedef NS_ENUM(NSInteger, SRVideoPlayerEndAction) {
 @property (nonatomic, assign) SRVideoPlayerEndAction playerEndAction;
 
 /**
- The name of the video which will play.
+ Name of the video which will play.
  */
 @property (nonatomic, copy) NSString *videoName;
 
 /**
- Create a SRVideoPlayer object with videoURL, playerView and playerSuperView.
+ Create a SRVideoPlayer object with video's URL.
 
  @param videoURL        The URL of the video.
  @param playerView      The view which you want to display the video.

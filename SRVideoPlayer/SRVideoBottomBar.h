@@ -28,8 +28,9 @@
 @property (nonatomic, strong) UILabel *currentTimeLabel;
 @property (nonatomic, strong) UILabel *totalTimeLabel;
 
-@property (nonatomic, strong) UIProgressView *videoCacheProgress;
-@property (nonatomic, strong) UISlider *videoProgressSlider;
+@property (nonatomic, strong) UISlider *playingProgressSlider;
+
+@property (nonatomic, strong) UIProgressView *cacheProgressView;
 
 + (instancetype)videoBottomBar;
 

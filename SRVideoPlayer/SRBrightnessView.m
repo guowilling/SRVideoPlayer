@@ -24,7 +24,7 @@
     [[UIScreen mainScreen] removeObserver:self forKeyPath:@"brightness"];
 }
 
-+ (instancetype)brightnessView {
++ (instancetype)sharedBrightnessView {
     
     static SRBrightnessView *brightnessView;
     static dispatch_once_t onceToken;
@@ -50,7 +50,7 @@
         self.alpha = 0.0;
         
         {
-            // UIToolbar 毛玻璃效果.
+            // UIToolbar 具有毛玻璃效果.
             UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
             toolbar.alpha = 0.9;
             [self addSubview:toolbar];
@@ -102,20 +102,22 @@
     CGFloat newValue = [change[@"new"] floatValue];
     [self updateTips:newValue];
     
-    if (self.alpha == 0.0) {
-        self.alpha = 1.0;
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
-        [self performSelector:@selector(fadeAway) withObject:nil afterDelay:2.0];
+    if (self.alpha != 0) {
+        return;
     }
+    self.alpha = 1.0;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [self performSelector:@selector(fadeAway) withObject:nil afterDelay:2.0];
 }
 
 - (void)fadeAway {
     
-    if (self.alpha == 1.0) {
-        [UIView animateWithDuration:0.8 animations:^{
-            self.alpha = 0.0;
-        }];
+    if (self.alpha != 1.0) {
+        return;
     }
+    [UIView animateWithDuration:0.8 animations:^{
+        self.alpha = 0;
+    }];
 }
 
 - (void)updateTips:(CGFloat)newValue {

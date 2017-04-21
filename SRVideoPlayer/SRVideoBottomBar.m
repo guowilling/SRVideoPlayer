@@ -55,34 +55,31 @@
     return _totalTimeLabel;
 }
 
-- (UISlider *)videoProgressSlider {
+- (UISlider *)playingProgressSlider {
     
-    if (!_videoProgressSlider) {
-        _videoProgressSlider = [[UISlider alloc] init];
-        _videoProgressSlider.minimumTrackTintColor = [UIColor whiteColor];
-        _videoProgressSlider.maximumTrackTintColor = [UIColor colorWithWhite:0 alpha:0.5];
-        [_videoProgressSlider setThumbImage:[UIImage imageNamed:SRVideoPlayerImageName(@"dot")] forState:UIControlStateNormal];
-        [_videoProgressSlider addTarget:self action:@selector(sliderChanging:) forControlEvents:UIControlEventValueChanged];
-        [_videoProgressSlider addTarget:self action:@selector(sliderDidEndChange:) forControlEvents:UIControlEventTouchUpInside];
-        [_videoProgressSlider addTarget:self action:@selector(sliderDidEndChange:) forControlEvents:UIControlEventTouchUpOutside];
-        [_videoProgressSlider addTarget:self action:@selector(sliderDidEndChange:) forControlEvents:UIControlEventTouchCancel];
-        
+    if (!_playingProgressSlider) {
+        _playingProgressSlider = [[UISlider alloc] init];
+        _playingProgressSlider.minimumTrackTintColor = [UIColor whiteColor];
+        _playingProgressSlider.maximumTrackTintColor = [UIColor colorWithWhite:0 alpha:0.5];
+        [_playingProgressSlider setThumbImage:[UIImage imageNamed:SRVideoPlayerImageName(@"dot")] forState:UIControlStateNormal];
+        [_playingProgressSlider addTarget:self action:@selector(sliderChanging:) forControlEvents:UIControlEventValueChanged];
+        [_playingProgressSlider addTarget:self action:@selector(sliderDidEndChange:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchCancel];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sliderTapAction:)];
-        [self.videoProgressSlider addGestureRecognizer:tap];
+        [_playingProgressSlider addGestureRecognizer:tap];
     }
-    return _videoProgressSlider;
+    return _playingProgressSlider;
 }
 
-- (UIProgressView *)videoCacheProgress {
+- (UIProgressView *)cacheProgressView {
     
-    if (!_videoCacheProgress) {
-        _videoCacheProgress = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-        _videoCacheProgress.progressTintColor = [UIColor colorWithWhite:1 alpha:0.75];
-        _videoCacheProgress.trackTintColor = [UIColor clearColor];
-        _videoCacheProgress.layer.cornerRadius = 0.5;
-        _videoCacheProgress.layer.masksToBounds = YES;
+    if (!_cacheProgressView) {
+        _cacheProgressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+        _cacheProgressView.progressTintColor = [UIColor colorWithWhite:1 alpha:0.75];
+        _cacheProgressView.trackTintColor = [UIColor clearColor];
+        _cacheProgressView.layer.cornerRadius = 0.5;
+        _cacheProgressView.layer.masksToBounds = YES;
     }
-    return _videoCacheProgress;
+    return _cacheProgressView;
 }
 
 + (instancetype)videoBottomBar {
@@ -94,6 +91,7 @@
     
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        
         __weak typeof(self) weakSelf = self;
         
         [self addSubview:self.playPauseBtn];
@@ -128,19 +126,19 @@
             make.height.mas_equalTo(44);
         }];
         
-        [self addSubview:self.videoProgressSlider];
-        [self.videoProgressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self addSubview:self.playingProgressSlider];
+        [self.playingProgressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(weakSelf.currentTimeLabel.mas_right);
             make.top.mas_equalTo(0);
             make.right.equalTo(weakSelf.totalTimeLabel.mas_left);
             make.bottom.mas_equalTo(0);
         }];
         
-        [self addSubview:self.videoCacheProgress];
-        [self.videoCacheProgress mas_remakeConstraints:^(MASConstraintMaker *make) {
+        [self addSubview:self.cacheProgressView];
+        [self.cacheProgressView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(weakSelf.currentTimeLabel.mas_right);
             make.right.equalTo(weakSelf.totalTimeLabel.mas_left);
-            make.centerY.equalTo(weakSelf.videoProgressSlider.mas_centerY).offset(1);
+            make.centerY.equalTo(weakSelf.playingProgressSlider.mas_centerY).offset(1);
             make.height.mas_equalTo(1);
         }];
     }
@@ -178,7 +176,7 @@
 - (void)sliderTapAction:(UITapGestureRecognizer *)tap {
     
     if ([_delegate respondsToSelector:@selector(videoBottomBarDidTapSlider:withTap:)]) {
-        [_delegate videoBottomBarDidTapSlider:self.videoProgressSlider withTap:tap];
+        [_delegate videoBottomBarDidTapSlider:self.playingProgressSlider withTap:tap];
     }
 }
 

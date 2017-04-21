@@ -44,6 +44,7 @@
     
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        
         __weak typeof(self) weakSelf = self;
         
         [self addSubview:self.closeBtn];

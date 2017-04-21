@@ -24,9 +24,9 @@
 - (void)downloadVideoOfURL:(NSURL *)URL;
 
 /**
- Cancel the current download video action, you can call this method when destroy the video player.
+ Cancel download video actions, you can call this method when destroy the video player.
  */
-- (void)cancelDownloadAction;
+- (void)cancelDownloadActions;
 
 /**
  Clear all cached videos.
