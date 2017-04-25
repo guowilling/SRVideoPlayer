@@ -2,19 +2,19 @@
 
 ## Features
 
-* Support local and network video and automatically distinguish.
-* Custom play interface providing play、pause、full screen button and play progress、load progress bar.
-* Slide left or right half of the screen up or down to adjust brightness or sound.
-* Slide the screen left or right to seek play progress.
-* Cache video data while playing, next time play directly with local data, do not have to download again.
+* [x] Support local and network video and automatically distinguish.
+* [x] Custom play interface providing play、pause、full screen button and play progress、load progress bar.
+* [x] Slide left or right half of the screen up or down to adjust brightness or sound.
+* [x] Slide the screen left or right to seek play progress.
+* [x] Cache video data while playing, next time play directly with local data, do not have to download again.
 
 ## Screenshots
 
-![image](./show1.png) ![image](./show2.png)  
+![image](./screenshot1.png) ![image](./screenshot2.png)  
   
 ***
 
-![image](./show3.png) ![image](./show4.png)
+![image](./screenshot3.png) ![image](./screenshot4.png)
 
 ## Installation
 
@@ -22,7 +22,7 @@
 > Add **pod 'SRVideoPlayer'** to the Podfile, then run **pod install** in the terminal.
 
 ### Manual
-> Drag the **SRVideoPlayer** folder to the project.(Note: if the project has already import Masonry, you should remove it which in the SRVideoPlayer folder)
+> Drag the **SRVideoPlayer** folder to the project.(Note: If the project has already import Masonry, you should remove it which in the SRVideoPlayer folder.)
 
 ## APIs
 
@@ -37,15 +37,13 @@
  */
 + (instancetype)playerWithVideoURL:(NSURL *)videoURL playerView:(UIView *)playerView playerSuperView:(UIView *)playerSuperView;
 
-/**
- Cancel download video actions, you can call this method when destroy the video player.
- */
-- (void)cancelDownloadActions;
+- (void)play;
 
-/**
- Clear all cached videos.
- */
-- (void)clearCachedVideos;
+- (void)pause;
+
+- (void)resume;
+
+- (void)destroyPlayer;
 ````
 
 ## Usage
@@ -60,7 +58,7 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 [_videoPlayer play];
 ````
 
-## Custom Settings
+## Custom
 
 ````objc
 /**
@@ -74,19 +72,8 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 @property (nonatomic, copy) NSString *videoName;
 ````
 
-## Significant Updates
+## Significant Update
 
 ### 2017.04.06
-> Cache video data while playing, next time play directly with local data, do not have to download again.  
-> But the current cache mode is not perfect, next I will optimize it.
-
-## More
-
-**If you have any questions, submit an issue or contact me.** 
-
-> [guowilling](https://github.com/guowilling)  
-> QQ: 1990991510  
-> Email: guowilling90@gmail.com
-
-**Have Fun.**
-
+Cache video data while playing, next time play directly with local data, do not have to download again.  
+But the current cache mode is not perfect, next I will optimize it.
