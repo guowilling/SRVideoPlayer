@@ -29,22 +29,22 @@ typedef NS_ENUM(NSInteger, SRVideoPlayerEndAction) {
 @property (nonatomic, assign, readonly) SRVideoPlayerState playerState;
 
 /**
- Action when video play to end, default is SRVideoPlayerEndActionStop.
+ The action when the video play to end, default is SRVideoPlayerEndActionStop.
  */
 @property (nonatomic, assign) SRVideoPlayerEndAction playerEndAction;
 
 /**
- Name of the video which will play.
+ The name of the video which will be displayed at the top.
  */
 @property (nonatomic, copy) NSString *videoName;
 
 /**
- Create a SRVideoPlayer object with video's URL.
+ Creates and returns a video player with video's URL, playerView and playerSuperView.
 
  @param videoURL        The URL of the video.
  @param playerView      The view which you want to display the video.
- @param playerSuperView PlayerView's super view.
- @return A SRVideoPlayer object
+ @param playerSuperView The playerView's super view.
+ @return A newly video player.
  */
 + (instancetype)playerWithVideoURL:(NSURL *)videoURL playerView:(UIView *)playerView playerSuperView:(UIView *)playerSuperView;
 

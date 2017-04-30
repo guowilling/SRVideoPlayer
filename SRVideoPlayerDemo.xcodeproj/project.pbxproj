@@ -14,7 +14,6 @@
 		6878ACC51E1B528200332891 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6878ACC41E1B528200332891 /* ViewController.m */; };
 		6878ACC81E1B528200332891 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6878ACC61E1B528200332891 /* Main.storyboard */; };
 		6878ACCA1E1B528200332891 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6878ACC91E1B528200332891 /* Assets.xcassets */; };
-		6878ACCD1E1B528200332891 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6878ACCB1E1B528200332891 /* LaunchScreen.storyboard */; };
 		6878AD241E1B572700332891 /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6878AD231E1B572700332891 /* VideoViewController.m */; };
 		687B0B681E1BCC550038E9D4 /* SRVideoBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B601E1BCC550038E9D4 /* SRVideoBottomBar.m */; };
 		687B0B691E1BCC550038E9D4 /* SRPlayerLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B621E1BCC550038E9D4 /* SRPlayerLayerView.m */; };
@@ -33,6 +32,7 @@
 		68AF545D1E1F98CA000A6E97 /* SRVideoTopBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */; };
 		68AF545F1E1F995D000A6E97 /* 好好(你的名字).mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 68AF545E1E1F995D000A6E97 /* 好好(你的名字).mp4 */; };
 		68AF54611E232D1B000A6E97 /* SRVideoPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 68AF54601E232D1B000A6E97 /* SRVideoPlayer.bundle */; };
+		6EBF58241EB117AF00B2B986 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF58231EB117AF00B2B986 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,7 +48,6 @@
 		6878ACC41E1B528200332891 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		6878ACC71E1B528200332891 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6878ACC91E1B528200332891 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		6878ACCC1E1B528200332891 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6878ACCE1E1B528200332891 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6878AD221E1B572700332891 /* VideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoViewController.h; sourceTree = "<group>"; };
 		6878AD231E1B572700332891 /* VideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoViewController.m; sourceTree = "<group>"; };
@@ -89,6 +88,7 @@
 		68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoTopBar.m; sourceTree = "<group>"; };
 		68AF545E1E1F995D000A6E97 /* 好好(你的名字).mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "好好(你的名字).mp4"; sourceTree = "<group>"; };
 		68AF54601E232D1B000A6E97 /* SRVideoPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SRVideoPlayer.bundle; sourceTree = "<group>"; };
+		6EBF58231EB117AF00B2B986 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +126,7 @@
 				6878ACC41E1B528200332891 /* ViewController.m */,
 				6878AD221E1B572700332891 /* VideoViewController.h */,
 				6878AD231E1B572700332891 /* VideoViewController.m */,
+				6878ACC61E1B528200332891 /* Main.storyboard */,
 				6878ACBD1E1B528200332891 /* Supporting Files */,
 			);
 			path = SRVideoPlayerDemo;
@@ -138,9 +139,8 @@
 				6878ACBE1E1B528200332891 /* main.m */,
 				6878ACC01E1B528200332891 /* AppDelegate.h */,
 				6878ACC11E1B528200332891 /* AppDelegate.m */,
-				6878ACC61E1B528200332891 /* Main.storyboard */,
+				6EBF58231EB117AF00B2B986 /* LaunchScreen.storyboard */,
 				6878ACC91E1B528200332891 /* Assets.xcassets */,
-				6878ACCB1E1B528200332891 /* LaunchScreen.storyboard */,
 				6878ACCE1E1B528200332891 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -260,10 +260,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6878ACCD1E1B528200332891 /* LaunchScreen.storyboard in Resources */,
 				6878ACCA1E1B528200332891 /* Assets.xcassets in Resources */,
 				68AF54611E232D1B000A6E97 /* SRVideoPlayer.bundle in Resources */,
 				68AF545F1E1F995D000A6E97 /* 好好(你的名字).mp4 in Resources */,
+				6EBF58241EB117AF00B2B986 /* LaunchScreen.storyboard in Resources */,
 				6878ACC81E1B528200332891 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,14 +308,6 @@
 				6878ACC71E1B528200332891 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		6878ACCB1E1B528200332891 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6878ACCC1E1B528200332891 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

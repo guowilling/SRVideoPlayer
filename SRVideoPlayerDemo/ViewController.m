@@ -30,14 +30,16 @@
 - (IBAction)localBtnAction {
     
     VideoViewController *videoVC = [[VideoViewController alloc] init];
-    videoVC.videoURL = [[NSBundle mainBundle] URLForResource:@"好好(你的名字)" withExtension:@"mp4"];
+    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"好好(你的名字)" withExtension:@"mp4"];
+    videoVC.videoURL = fileURL;
     [self.navigationController pushViewController:videoVC animated:YES];
 }
 
 - (IBAction)networkBtnAction {
     
     VideoViewController *videoVC = [[VideoViewController alloc] init];
-    videoVC.videoURL = [NSURL URLWithString:@"http://yxfile.idealsee.com/9f6f64aca98f90b91d260555d3b41b97_mp4.mp4"];
+    NSString *videoURLString = @"http://yxfile.idealsee.com/9f6f64aca98f90b91d260555d3b41b97_mp4.mp4";
+    videoVC.videoURL = [NSURL URLWithString:videoURLString];
     [self.navigationController pushViewController:videoVC animated:YES];
 }
 
