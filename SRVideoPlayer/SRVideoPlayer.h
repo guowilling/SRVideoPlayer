@@ -2,7 +2,7 @@
 //  SRVideoPlayer.h
 //  SRVideoPlayer
 //
-//  Created by 郭伟林 on 17/1/5.
+//  Created by https://github.com/guowilling on 17/1/5.
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, SRVideoPlayerEndAction) {
 @property (nonatomic, assign) SRVideoPlayerEndAction playerEndAction;
 
 /**
- The name of the video which will be displayed at the top.
+ The name of the video which will be displayed in the top center.
  */
 @property (nonatomic, copy) NSString *videoName;
 

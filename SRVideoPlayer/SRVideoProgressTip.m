@@ -2,7 +2,7 @@
 //  SRVideoOperationTip.m
 //  SRVideoPlayer
 //
-//  Created by 郭伟林 on 17/1/5.
+//  Created by https://github.com/guowilling on 17/1/5.
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
@@ -35,7 +35,7 @@
     
     if (!_tipLabel) {
         _tipLabel = [[UILabel alloc]init];
-        _tipLabel.font = [UIFont systemFontOfSize:13];
+        _tipLabel.font = [UIFont systemFontOfSize:15];
         _tipLabel.textColor = [UIColor whiteColor];
         _tipLabel.textAlignment = NSTextAlignmentCenter;
     }
@@ -51,17 +51,17 @@
         
         [self addSubview:self.tipImageView];
         [self.tipImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(12.5);
-            make.width.mas_equalTo(45);
-            make.height.mas_equalTo(25);
+            make.top.mas_equalTo(20);
+            make.width.mas_equalTo(60);
+            make.height.mas_equalTo(30);
             make.centerX.equalTo(weakSelf);
         }];
-
+        
         [self addSubview:self.tipLabel];
         [self.tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(_tipImageView.mas_bottom);
-            make.width.mas_equalTo(120);
-            make.height.mas_equalTo(20);
+            make.width.mas_equalTo(150);
+            make.height.mas_equalTo(30);
             make.centerX.equalTo(weakSelf);
         }];
     }

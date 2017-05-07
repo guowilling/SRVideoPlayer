@@ -2,7 +2,7 @@
 //  SRBrightnessView.m
 //  SRVideoPlayer
 //
-//  Created by 郭伟林 on 17/4/6.
+//  Created by https://github.com/guowilling on 17/4/6.
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
@@ -50,7 +50,6 @@
         self.alpha = 0.0;
         
         {
-            // UIToolbar 具有毛玻璃效果.
             UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
             toolbar.alpha = 0.9;
             [self addSubview:toolbar];
@@ -61,7 +60,7 @@
             title.font = [UIFont boldSystemFontOfSize:16];
             title.textColor = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
             title.textAlignment = NSTextAlignmentCenter;
-            title.text = @"Brightness";
+            title.text = @"亮度";
             [self addSubview:title];
         }
         

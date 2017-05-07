@@ -2,7 +2,7 @@
 //  VideoViewController.m
 //  SRVideoPlayerDemo
 //
-//  Created by 郭伟林 on 17/1/5.
+//  Created by Willing Guo on 17/1/5.
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
@@ -33,7 +33,7 @@
     [self.view addSubview:playerView];
     _videoPlayer = [SRVideoPlayer playerWithVideoURL:_videoURL playerView:playerView playerSuperView:playerView.superview];
     _videoPlayer.videoName = @"Here Is The Video Name";
-    _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
+    _videoPlayer.playerEndAction = SRVideoPlayerEndActionLoop;
     [_videoPlayer play];
 }
 

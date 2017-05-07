@@ -2,7 +2,7 @@
 //  SRVideoBottomView.m
 //  SRVideoPlayer
 //
-//  Created by 郭伟林 on 17/1/5.
+//  Created by https://github.com/guowilling on 17/1/5.
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
     
     if (!_playPauseBtn) {
         _playPauseBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _playPauseBtn.showsTouchWhenHighlighted = YES;
         [_playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"pause")] forState:UIControlStateNormal];
         [_playPauseBtn addTarget:self action:@selector(playPauseBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -27,6 +28,7 @@
     
     if (!_changeScreenBtn) {
         _changeScreenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _changeScreenBtn.showsTouchWhenHighlighted = YES;
         [_changeScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"full_screen")] forState:UIControlStateNormal];
         [_changeScreenBtn addTarget:self action:@selector(changeScreenBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -36,7 +38,7 @@
 - (UILabel *)currentTimeLabel {
     
     if (!_currentTimeLabel) {
-        _currentTimeLabel = [[UILabel alloc]init];
+        _currentTimeLabel = [[UILabel alloc] init];
         _currentTimeLabel.textColor = [UIColor whiteColor];
         _currentTimeLabel.font = [UIFont systemFontOfSize:12.0];
         _currentTimeLabel.textAlignment = NSTextAlignmentCenter;
@@ -90,8 +92,6 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        
         __weak typeof(self) weakSelf = self;
         
         [self addSubview:self.playPauseBtn];

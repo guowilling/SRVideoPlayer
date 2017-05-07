@@ -2,7 +2,7 @@
 //  SRVideoTopBar.m
 //  SRVideoPlayer
 //
-//  Created by 郭伟林 on 17/1/6.
+//  Created by https://github.com/guowilling on 17/1/6.
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
     
     if (!_closeBtn) {
         _closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _closeBtn.showsTouchWhenHighlighted = YES;
         [_closeBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"close")] forState:UIControlStateNormal];
         [_closeBtn addTarget:self action:@selector(closeBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -28,7 +29,7 @@
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.textColor = [UIColor whiteColor];
-        _titleLabel.font = [UIFont systemFontOfSize:15.0];
+        _titleLabel.font = [UIFont systemFontOfSize:17.0];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.adjustsFontSizeToFitWidth = YES;
     }
@@ -43,8 +44,6 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        
         __weak typeof(self) weakSelf = self;
         
         [self addSubview:self.closeBtn];

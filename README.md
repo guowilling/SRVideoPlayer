@@ -1,17 +1,18 @@
-**SRVideoPlayer** is a video player based on AVFoundation. Custom play interface providing play, pause, full screen button and play progress, load progress bar. Cache video data while playing, next time play directly with cached data, do not have to download again.
+# SRVideoPlayer
+
+A custom video player based on AVFoundation. Automatically distinguish local and network video, cache network video data while playing, next time play directly with cached data, do not have to download again.
 
 ## Features
 
-* [x] Automatically distinguish local and network video.
 * [x] Support to slide left half of the screen up or down to adjust brightness.
 * [x] Support to slide right half of the screen up or down to adjust sound.
 * [x] Support to slide the screen left or right to seek play progress.
 
 ## Screenshots
 
-![image](./screenshots1.png) ![image](./screenshots2.png)
+![image](./Screenshots/screenshots1.png) ![image](./Screenshots/screenshots2.png)
 
-![image](./screenshots3.png) ![image](./screenshots4.png)
+![image](./Screenshots/screenshots3.png) ![image](./Screenshots/screenshots4.png)
 
 ## Installation
 
@@ -54,7 +55,7 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 @property (nonatomic, assign) SRVideoPlayerEndAction playerEndAction;
 
 /**
- The name of the video which will be displayed at the top.
+ The name of the video which will be displayed in the top center.
  */
 @property (nonatomic, copy) NSString *videoName;
 ````

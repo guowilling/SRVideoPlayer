@@ -2,7 +2,7 @@
 //  SRVideoPlayer.m
 //  SRVideoPlayer
 //
-//  Created by 郭伟林 on 17/1/5.
+//  Created by https://github.com/guowilling on 17/1/5.
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
@@ -247,8 +247,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [_playerView addSubview:self.videoProgressTip];
     [self.videoProgressTip mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(weakSelf.playerView);
-        make.width.equalTo(@(120));
-        make.height.equalTo(@60);
+        make.width.equalTo(@150);
+        make.height.equalTo(@90);
     }];
     
     [_playerView addSubview:self.replayBtn];
@@ -280,7 +280,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
             break;
     }
     
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications]; // Notice: Must set the app only support portrait orientation.
+    // Notice: Must set the app only support portrait orientation.
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
@@ -321,9 +322,9 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                 _playerState = SRVideoPlayerStatePlaying;
                 
                 self.bottomBar.userInteractionEnabled = YES;
-                self.touchView.userInteractionEnabled = YES; // Prevents the crash that caused by dragging before the video has not load successfully.
+                self.touchView.userInteractionEnabled = YES; // prevents the crash that caused by dragging before the video has not load successfully
                 
-                _videoDuration = playerItem.duration.value / playerItem.duration.timescale; // Total time of the video.
+                _videoDuration = playerItem.duration.value / playerItem.duration.timescale; // total time of the video
                 self.bottomBar.totalTimeLabel.text = [self formatTimeWith:(long)ceil(_videoDuration)];
                 self.bottomBar.playingProgressSlider.minimumValue = 0.0;
                 self.bottomBar.playingProgressSlider.maximumValue = _videoDuration;
@@ -373,8 +374,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     
     if ([keyPath isEqualToString:SRVideoPlayerItemLoadedTimeRangesKeyPath]) {
         NSLog(@"SRVideoPlayerItemLoadedTimeRangesKeyPath");
-        CMTimeRange timeRange = [playerItem.loadedTimeRanges.firstObject CMTimeRangeValue]; // Buffer area
-        NSTimeInterval timeBuffered = CMTimeGetSeconds(timeRange.start) + CMTimeGetSeconds(timeRange.duration); // Buffer progress
+        CMTimeRange timeRange = [playerItem.loadedTimeRanges.firstObject CMTimeRangeValue]; // buffer area
+        NSTimeInterval timeBuffered = CMTimeGetSeconds(timeRange.start) + CMTimeGetSeconds(timeRange.duration); // buffer progress
         NSTimeInterval timeTotal= CMTimeGetSeconds(playerItem.duration);
         [self.bottomBar.cacheProgressView setProgress:timeBuffered / timeTotal animated:YES];
     }
@@ -424,7 +425,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 - (void)replayAction {
     
-    //[self.player seekToTime:kCMTimeZero];
     [self seekToTimeWithSeconds:0];
     
     self.topBar.hidden    = NO;
@@ -451,13 +451,11 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [self.activityIndicatorView startAnimating];
 }
 
-
 - (void)play {
     
     if (!_videoURL) {
         return;
     }
-    
     if ([_videoURL.absoluteString containsString:@"http"] || [_videoURL.absoluteString containsString:@"https"]) {
         [SRVideoDownloader sharedDownloader].delegate = self;
         [[SRVideoDownloader sharedDownloader] downloadVideoOfURL:_videoURL];
@@ -471,12 +469,11 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     if (!_playerItem) {
         return;
     }
-    
     [_player pause];
-    _playerState = SRVideoPlayerStatePaused;
-    [self.bottomBar.playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"start")] forState:UIControlStateNormal];
     
     _isManualPaused = YES;
+    _playerState = SRVideoPlayerStatePaused;
+    [self.bottomBar.playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"start")] forState:UIControlStateNormal];
 }
 
 - (void)resume {
@@ -484,32 +481,31 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     if (!_playerItem) {
         return;
     }
-    
     [_player play];
-    _playerState = SRVideoPlayerStatePlaying;
-    [self.bottomBar.playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"pause")] forState:UIControlStateNormal];
     
     _isManualPaused = NO;
+    _playerState = SRVideoPlayerStatePlaying;
+    [self.bottomBar.playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"pause")] forState:UIControlStateNormal];
 }
 
 - (void)destroyPlayer {
     
-    if (!_playerItem) {
+    if (!_player) {
         return;
     }
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    if (_player && _playerState == SRVideoPlayerStatePlaying) {
+    if (_playerState == SRVideoPlayerStatePlaying) {
         [_player pause];
     }
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_player removeTimeObserver:_playbackTimeObserver];
+    _player = nil;
+    _playbackTimeObserver = nil;
+    
     [_playerItem removeObserver:self forKeyPath:SRVideoPlayerItemStatusKeyPath];
     [_playerItem removeObserver:self forKeyPath:SRVideoPlayerItemLoadedTimeRangesKeyPath];
-    [_player removeTimeObserver:_playbackTimeObserver];
-    
-    _player = nil;
     _playerItem = nil;
-    _playbackTimeObserver = nil;
     
     [_playerView removeFromSuperview];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -709,7 +705,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     if (!_playerItem) {
         return;
     }
-
     switch (_playerState) {
         case SRVideoPlayerStatePlaying:
             [self pause];
@@ -781,6 +776,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 - (void)didFindCacheVideoFilePath:(NSString *)filePath {
     
     _videoURL = [NSURL fileURLWithPath:filePath];
+    
     [self setupPlayer];
 }
 
@@ -802,10 +798,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     if (_playerState == SRVideoPlayerStateStopped) {
         return;
     }
-    
     seconds = MAX(0, seconds);
     seconds = MIN(seconds, _videoDuration);
-    
     [self.player pause];
     [self.player seekToTime:CMTimeMakeWithSeconds(seconds, NSEC_PER_SEC) completionHandler:^(BOOL finished) {
         [self.player play];
@@ -828,7 +822,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     if (videoCurrentTime < 0) {
         videoCurrentTime = 0;
     }
-    
     return videoCurrentTime;
 }
 

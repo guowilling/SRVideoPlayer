@@ -31,7 +31,7 @@
 		68A0AE121E54060500A8BCEF /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A0AE081E54060500A8BCEF /* ViewController+MASAdditions.m */; };
 		68AF545D1E1F98CA000A6E97 /* SRVideoTopBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */; };
 		68AF545F1E1F995D000A6E97 /* 好好(你的名字).mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 68AF545E1E1F995D000A6E97 /* 好好(你的名字).mp4 */; };
-		68AF54611E232D1B000A6E97 /* SRVideoPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 68AF54601E232D1B000A6E97 /* SRVideoPlayer.bundle */; };
+		6EAD9CB31EBF229400ABA4DE /* SRVideoPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6EAD9CB21EBF229400ABA4DE /* SRVideoPlayer.bundle */; };
 		6EBF58241EB117AF00B2B986 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF58231EB117AF00B2B986 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -87,7 +87,7 @@
 		68AF545B1E1F98CA000A6E97 /* SRVideoTopBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoTopBar.h; sourceTree = "<group>"; };
 		68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoTopBar.m; sourceTree = "<group>"; };
 		68AF545E1E1F995D000A6E97 /* 好好(你的名字).mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "好好(你的名字).mp4"; sourceTree = "<group>"; };
-		68AF54601E232D1B000A6E97 /* SRVideoPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SRVideoPlayer.bundle; sourceTree = "<group>"; };
+		6EAD9CB21EBF229400ABA4DE /* SRVideoPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SRVideoPlayer.bundle; sourceTree = "<group>"; };
 		6EBF58231EB117AF00B2B986 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,7 +105,6 @@
 		6878ACB11E1B528200332891 = {
 			isa = PBXGroup;
 			children = (
-				687B0B5E1E1BCC550038E9D4 /* SRVideoPlayer */,
 				6878ACBC1E1B528200332891 /* SRVideoPlayerDemo */,
 				6878ACBB1E1B528200332891 /* Products */,
 			);
@@ -122,6 +121,7 @@
 		6878ACBC1E1B528200332891 /* SRVideoPlayerDemo */ = {
 			isa = PBXGroup;
 			children = (
+				687B0B5E1E1BCC550038E9D4 /* SRVideoPlayer */,
 				6878ACC31E1B528200332891 /* ViewController.h */,
 				6878ACC41E1B528200332891 /* ViewController.m */,
 				6878AD221E1B572700332891 /* VideoViewController.h */,
@@ -163,10 +163,11 @@
 				687B0B621E1BCC550038E9D4 /* SRPlayerLayerView.m */,
 				6815E1071E96196E0041AE85 /* SRVideoDownloader.h */,
 				6815E1081E96196E0041AE85 /* SRVideoDownloader.m */,
+				6EAD9CB21EBF229400ABA4DE /* SRVideoPlayer.bundle */,
 				68A0ADEF1E54060500A8BCEF /* Masonry */,
-				68AF54601E232D1B000A6E97 /* SRVideoPlayer.bundle */,
 			);
-			path = SRVideoPlayer;
+			name = SRVideoPlayer;
+			path = ../../SRVideoPlayer;
 			sourceTree = "<group>";
 		};
 		68A0ADEF1E54060500A8BCEF /* Masonry */ = {
@@ -261,10 +262,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6878ACCA1E1B528200332891 /* Assets.xcassets in Resources */,
-				68AF54611E232D1B000A6E97 /* SRVideoPlayer.bundle in Resources */,
 				68AF545F1E1F995D000A6E97 /* 好好(你的名字).mp4 in Resources */,
 				6EBF58241EB117AF00B2B986 /* LaunchScreen.storyboard in Resources */,
 				6878ACC81E1B528200332891 /* Main.storyboard in Resources */,
+				6EAD9CB31EBF229400ABA4DE /* SRVideoPlayer.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
