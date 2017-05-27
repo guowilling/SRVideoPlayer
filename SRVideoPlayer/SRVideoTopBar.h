@@ -11,6 +11,7 @@
 @protocol SRVideoTopBarBarDelegate <NSObject>
 
 - (void)videoTopBarDidClickCloseBtn;
+- (void)videoTopBarDidClickDownloadBtn;
 
 @end
 
@@ -18,10 +19,8 @@
 
 @property (nonatomic, weak) id<SRVideoTopBarBarDelegate> delegate;
 
-@property (nonatomic, strong) UIButton *closeBtn;
-
-@property (nonatomic, strong) UILabel *titleLabel;
-
 + (instancetype)videoTopBar;
+
+- (void)setTitle:(NSString *)text;
 
 @end

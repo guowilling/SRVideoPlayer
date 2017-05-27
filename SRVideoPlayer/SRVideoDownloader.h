@@ -6,31 +6,21 @@
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@protocol SRVideoDownloaderDelegate <NSObject>
-
-- (void)notFindCacheVideoFile;
-- (void)didFindCacheVideoFilePath:(NSString *)filePath;
-
-@end
+typedef void (^Progress)(CGFloat progress);
+typedef void (^Completion)(NSString *cacheVideoPath, NSError *error);
 
 @interface SRVideoDownloader : NSObject
 
-@property(nonatomic, weak) id <SRVideoDownloaderDelegate> delegate;
-
 + (instancetype)sharedDownloader;
 
-- (void)downloadVideoOfURL:(NSURL *)URL;
+- (NSString *)querySandboxWithURL:(NSURL *)URL;
 
-/**
- Cancel download video actions, you can call this method when destroy the video player.
- */
+- (void)downloadVideoOfURL:(NSURL *)URL progress:(Progress)progress completion:(Completion)completion;
+
 - (void)cancelDownloadActions;
 
-/**
- Clear all cached videos.
- */
 - (void)clearCachedVideos;
 
 @end

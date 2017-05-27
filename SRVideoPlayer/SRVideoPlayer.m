@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     SRControlTypeNone = 999
 };
 
-@interface SRVideoPlayer() <UIGestureRecognizerDelegate, SRVideoTopBarBarDelegate, SRVideoBottomBarDelegate, SRVideoDownloaderDelegate>
+@interface SRVideoPlayer() <UIGestureRecognizerDelegate, SRVideoTopBarBarDelegate, SRVideoBottomBarDelegate>
 
 @property (nonatomic, strong) NSURL *videoURL;
 
@@ -457,11 +457,12 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         return;
     }
     if ([_videoURL.absoluteString containsString:@"http"] || [_videoURL.absoluteString containsString:@"https"]) {
-        [SRVideoDownloader sharedDownloader].delegate = self;
-        [[SRVideoDownloader sharedDownloader] downloadVideoOfURL:_videoURL];
-    } else {
-        [self setupPlayer];
+        NSString *cachePath = [[SRVideoDownloader sharedDownloader] querySandboxWithURL:_videoURL];
+        if (cachePath) {
+            _videoURL = [NSURL fileURLWithPath:cachePath];
+        }
     }
+    [self setupPlayer];
 }
 
 - (void)pause {
@@ -508,7 +509,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     _playerItem = nil;
     
     [_playerView removeFromSuperview];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 #pragma mark - Orientation Methods
@@ -694,8 +694,19 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 - (void)videoTopBarDidClickCloseBtn {
     
     [self destroyPlayer];
+}
+
+- (void)videoTopBarDidClickDownloadBtn {
     
-    [[SRVideoDownloader sharedDownloader] cancelDownloadActions];
+    [[SRVideoDownloader sharedDownloader] downloadVideoOfURL:_videoURL progress:^(CGFloat progress) {
+        NSLog(@"progress: %.2f", progress);
+    } completion:^(NSString *cacheVideoPath, NSError *error) {
+        if (cacheVideoPath) {
+            NSLog(@"cacheVideoPath: %@", cacheVideoPath);
+        } else {
+            NSLog(@"error: %@", error);
+        }
+    }];
 }
 
 #pragma mark - SRVideoBottomBarDelegate
@@ -764,20 +775,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [self.bottomBar.playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"pause")] forState:UIControlStateNormal];
     
     [self timingHideBottomBarTime];
-}
-
-#pragma mark - SRVideoDownloaderDelegate
-
-- (void)notFindCacheVideoFile {
-    
-    [self setupPlayer];
-}
-
-- (void)didFindCacheVideoFilePath:(NSString *)filePath {
-    
-    _videoURL = [NSURL fileURLWithPath:filePath];
-    
-    [self setupPlayer];
 }
 
 #pragma mark - Assist Methods
@@ -856,7 +853,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     
     _videoName = videoName;
     
-    _topBar.titleLabel.text = videoName;
+    [_topBar setTitle:videoName];
 }
 
 @end

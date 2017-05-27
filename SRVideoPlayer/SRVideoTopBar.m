@@ -11,6 +11,16 @@
 
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
+@interface SRVideoTopBar ()
+
+@property (nonatomic, strong) UIButton *closeBtn;
+
+@property (nonatomic, strong) UILabel  *titleLabel;
+
+@property (nonatomic, strong) UIButton *downloadBtn;
+
+@end
+
 @implementation SRVideoTopBar
 
 - (UIButton *)closeBtn {
@@ -34,6 +44,17 @@
         _titleLabel.adjustsFontSizeToFitWidth = YES;
     }
     return _titleLabel;
+}
+
+- (UIButton *)downloadBtn {
+    
+    if (!_downloadBtn) {
+        _downloadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _downloadBtn.showsTouchWhenHighlighted = YES;
+        [_downloadBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"download")] forState:UIControlStateNormal];
+        [_downloadBtn addTarget:self action:@selector(downloadBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _downloadBtn;
 }
 
 + (instancetype)videoTopBar {
@@ -61,6 +82,14 @@
             make.top.mas_equalTo(0);
             make.bottom.mas_equalTo(0);
         }];
+        
+        [self addSubview:self.downloadBtn];
+        [self.downloadBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.width.mas_equalTo(44);
+            make.height.mas_equalTo(44);
+        }];
     }
     return self;
 }
@@ -70,6 +99,19 @@
     if ([_delegate respondsToSelector:@selector(videoTopBarDidClickCloseBtn)]) {
         [_delegate videoTopBarDidClickCloseBtn];
     }
+}
+
+- (void)downloadBtnAction {
+    
+    self.downloadBtn.userInteractionEnabled = NO;
+    if ([_delegate respondsToSelector:@selector(videoTopBarDidClickDownloadBtn)]) {
+        [_delegate videoTopBarDidClickDownloadBtn];
+    }
+}
+
+- (void)setTitle:(NSString *)text {
+    
+    self.titleLabel.text = text;
 }
 
 @end
