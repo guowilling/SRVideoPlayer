@@ -49,9 +49,7 @@ typedef NS_ENUM(NSInteger, SRVideoPlayerEndAction) {
 + (instancetype)playerWithVideoURL:(NSURL *)videoURL playerView:(UIView *)playerView playerSuperView:(UIView *)playerSuperView;
 
 - (void)play;
-
 - (void)pause;
-
 - (void)resume;
 
 - (void)destroyPlayer;

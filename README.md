@@ -1,18 +1,16 @@
 # SRVideoPlayer
 
-A custom video player based on AVFoundation. Automatically distinguish local and network video, cache network video data while playing, next time play directly with cached data, do not have to download again.
+Custom interface video player which has various interactive gestures.
+
+![image](./screenshots.png)
 
 ## Features
 
+* [x] Support to tap and drag bottom slider seek play progress.
 * [x] Support to slide left half of the screen up or down to adjust brightness.
 * [x] Support to slide right half of the screen up or down to adjust sound.
 * [x] Support to slide the screen left or right to seek play progress.
-
-## Screenshots
-
-![image](./Screenshots/screenshots1.png) ![image](./Screenshots/screenshots2.png)
-
-![image](./Screenshots/screenshots3.png) ![image](./Screenshots/screenshots4.png)
+* [x] Support to download network video so next time play directly with cached data.
 
 ## Installation
 
@@ -22,7 +20,7 @@ A custom video player based on AVFoundation. Automatically distinguish local and
 **Manual**
 > Drag the **SRVideoPlayer** folder to the project.(Note: If the project has already import Masonry, you should remove it which in the SRVideoPlayer folder.)
 
-## Usage
+## APIs
 
 ````objc
 /**
@@ -34,7 +32,15 @@ A custom video player based on AVFoundation. Automatically distinguish local and
  @return A newly video player.
  */
 + (instancetype)playerWithVideoURL:(NSURL *)videoURL playerView:(UIView *)playerView playerSuperView:(UIView *)playerSuperView;
+
+- (void)play;
+- (void)pause;
+- (void)resume;
+
+- (void)destroyPlayer;
 ````
+
+## Usage
 
 ````objc
 UIView *playerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width)];
@@ -42,7 +48,7 @@ playerView.center = self.view.center;
 [self.view addSubview:playerView];
 _videoPlayer = [SRVideoPlayer playerWithVideoURL:_videoURL playerView:playerView playerSuperView:playerView.superview];
 _videoPlayer.videoName = @"Here Is The Video Name";
-_videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
+_videoPlayer.playerEndAction = SRVideoPlayerEndActionLoop;
 [_videoPlayer play];
 ````
 
@@ -60,8 +66,6 @@ _videoPlayer.playerEndAction = SRVideoPlayerEndActionStop;
 @property (nonatomic, copy) NSString *videoName;
 ````
 
-## Significant Update
+## Contacts
 
-### 2017.04.06
-Cache video data while playing, next time play directly with local data, do not have to download again.  
-But the current cache mode is not perfect, next I will optimize it.
+Submit an issue or email me if you have any questions. <guowilling90@gmail.com>
