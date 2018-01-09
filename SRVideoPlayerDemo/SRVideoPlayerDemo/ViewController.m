@@ -16,14 +16,12 @@
 @implementation ViewController
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
     
     self.title = @"SRVideoPlayer";
 }
 
 - (IBAction)localBtnAction {
-    
     VideoViewController *videoVC = [[VideoViewController alloc] init];
     NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"好好(你的名字)" withExtension:@"mp4"];
     videoVC.videoURL = fileURL;
@@ -31,7 +29,6 @@
 }
 
 - (IBAction)networkBtnAction {
-    
     VideoViewController *videoVC = [[VideoViewController alloc] init];
     NSString *videoURLString = @"http://yxfile.idealsee.com/9f6f64aca98f90b91d260555d3b41b97_mp4.mp4";
     videoVC.videoURL = [NSURL URLWithString:videoURLString];

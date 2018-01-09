@@ -31,7 +31,6 @@
 @implementation SRVideoDownloader
 
 - (NSURLSession *)session {
-    
     if (!_session) {
         _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
                                                  delegate:self
@@ -41,7 +40,6 @@
 }
 
 + (instancetype)sharedDownloader {
-    
     static SRVideoDownloader *videoDownloader;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -51,7 +49,6 @@
 }
 
 - (instancetype)init {
-    
     if (self = [super init]) {
         [self createVideosDirectory];
     }
@@ -59,7 +56,6 @@
 }
 
 - (void)createVideosDirectory {
-    
     NSString *videosDirectory = SRVideosDirectory;
     BOOL isDirectory = NO;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -70,7 +66,6 @@
 }
 
 - (NSString *)querySandboxWithURL:(NSURL *)URL {
-    
     NSString *videoName = URL.lastPathComponent;
     NSString *cachePath = [SRVideosDirectory stringByAppendingPathComponent:videoName];
     if ([[NSFileManager defaultManager] fileExistsAtPath:cachePath]) {
@@ -80,7 +75,6 @@
 }
 
 - (void)downloadVideoOfURL:(NSURL *)URL progress:(Progress)progress completion:(Completion)completion {
-    
     if (!URL) {
         return;
     }
@@ -88,7 +82,6 @@
         NSLog(@"It is not network video.");
         return;
     }
-    
     self.progress = progress;
     self.completion = completion;
     
@@ -97,12 +90,12 @@
     
     self.tmpVideoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:videoName];
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.tmpVideoPath]) {
-        _fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.tmpVideoPath];
-        _downloadedLength = [_fileHandle seekToEndOfFile];
+        self.fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.tmpVideoPath];
+        self.downloadedLength = [self.fileHandle seekToEndOfFile];
     } else {
         [[NSFileManager defaultManager] createFileAtPath:self.tmpVideoPath contents:nil attributes:nil];
-        _fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.tmpVideoPath];
-        _downloadedLength = 0;
+        self.fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.tmpVideoPath];
+        self.downloadedLength = 0;
     }
     
     NSMutableURLRequest *requeset = [NSMutableURLRequest requestWithURL:URL];
@@ -114,59 +107,50 @@
 #pragma mark - NSURLSessionDataDelegate
 
 - (void)URLSession:(NSURLSession *)session dataTask:(nonnull NSURLSessionDataTask *)dataTask didReceiveResponse:(nonnull NSURLResponse *)response completionHandler:(nonnull void (^)(NSURLSessionResponseDisposition))completionHandler {
-    
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
     NSDictionary *allHeaderFields = [httpResponse allHeaderFields];
     NSString *contentRange = [allHeaderFields valueForKey:@"Content-Range"];
-    _expectedLength = [contentRange componentsSeparatedByString:@"/"].lastObject.integerValue;
+    self.expectedLength = [contentRange componentsSeparatedByString:@"/"].lastObject.integerValue;
     completionHandler(NSURLSessionResponseAllow);
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+    [self.fileHandle writeData:data];
     
-    [_fileHandle writeData:data];
-    
-    _downloadedLength += data.length;
-    
+    self.downloadedLength += data.length;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.progress) {
-            self.progress(_downloadedLength * 1.0 / _expectedLength);
+            self.progress(self.downloadedLength * 1.0 / self.expectedLength);
         }
     });
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
-    
     if (error) {
         if (self.completion) {
             self.completion(nil, error);
         }
         return;
     }
-    
-    NSError *moveItemError;
-    if (![[NSFileManager defaultManager] moveItemAtPath:self.tmpVideoPath toPath:self.cacheVideoPath error:&moveItemError]) {
-        NSLog(@"moveItemAtPath error: %@", moveItemError);
-        return;
-    }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.completion) {
             self.completion(self.cacheVideoPath, nil);
         }
     });
+    NSError *moveItemError;
+    if (![[NSFileManager defaultManager] moveItemAtPath:self.tmpVideoPath toPath:self.cacheVideoPath error:&moveItemError]) {
+        NSLog(@"moveItemAtPath error: %@", moveItemError);
+    }
 }
 
 #pragma mark - Public Methods
 
 - (void)cancelDownloadActions {
-    
     [self.session invalidateAndCancel];
     [self setSession:nil];
 }
 
 - (void)clearCachedVideos {
-    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:SRVideosDirectory]) {
         [fileManager removeItemAtPath:SRVideosDirectory error:nil];

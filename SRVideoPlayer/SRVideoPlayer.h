@@ -24,7 +24,15 @@ typedef NS_ENUM(NSInteger, SRVideoPlayerEndAction) {
     SRVideoPlayerEndActionDestroy
 };
 
+@protocol SRVideoPlayerDelegate <NSObject>
+
+- (void)videoPlayerDestroyed;
+
+@end
+
 @interface SRVideoPlayer : NSObject
+
+@property (nonatomic, weak) id<SRVideoPlayerDelegate> delegate;
 
 @property (nonatomic, assign, readonly) SRVideoPlayerState playerState;
 
@@ -51,7 +59,6 @@ typedef NS_ENUM(NSInteger, SRVideoPlayerEndAction) {
 - (void)play;
 - (void)pause;
 - (void)resume;
-
 - (void)destroyPlayer;
 
 @end

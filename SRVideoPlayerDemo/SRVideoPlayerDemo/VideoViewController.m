@@ -18,7 +18,6 @@
 @implementation VideoViewController
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
@@ -26,8 +25,13 @@
     [self showVideoPlayer];
 }
 
-- (void)showVideoPlayer {
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     
+    [_videoPlayer destroyPlayer];
+}
+
+- (void)showVideoPlayer {
     UIView *playerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width)];
     playerView.center = self.view.center;
     [self.view addSubview:playerView];
@@ -35,13 +39,6 @@
     _videoPlayer.videoName = @"Here Is The Video Name";
     _videoPlayer.playerEndAction = SRVideoPlayerEndActionLoop;
     [_videoPlayer play];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    
-    [super viewWillDisappear:animated];
-    
-    [_videoPlayer destroyPlayer];
 }
 
 @end

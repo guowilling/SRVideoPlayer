@@ -22,7 +22,6 @@
 @implementation SRVideoProgressTip
 
 - (UIImageView *)tipImageView {
-    
     if (!_tipImageView) {
         _tipImageView = [[UIImageView alloc] init];
         _tipImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -32,7 +31,6 @@
 }
 
 - (UILabel *)tipLabel {
-    
     if (!_tipLabel) {
         _tipLabel = [[UILabel alloc]init];
         _tipLabel.font = [UIFont systemFontOfSize:15];
@@ -43,7 +41,6 @@
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
         
@@ -69,12 +66,10 @@
 }
 
 - (void)setTipImageViewImage:(UIImage *)image {
-    
     self.tipImageView.image = image;
 }
 
 - (void)setTipLabelText:(NSString *)text {
-    
     self.tipLabel.text = text;
 }
 

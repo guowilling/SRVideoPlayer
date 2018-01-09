@@ -17,6 +17,8 @@
 #import "SRBrightnessView.h"
 #import "SRVideoDownloader.h"
 
+static const CGFloat kTopBottomBarH = 60;
+
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
 static NSString * const SRVideoPlayerItemStatusKeyPath           = @"status";
@@ -74,16 +76,13 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 @implementation SRVideoPlayer
 
 - (void)dealloc {
-    
-    [self destroyPlayer];
-    
     NSLog(@"%s", __func__);
+    [self destroyPlayer];
 }
 
 #pragma mark - Lazy Load
 
 - (SRPlayerLayerView *)playerLayerView {
-    
     if (!_playerLayerView) {
         _playerLayerView = [[SRPlayerLayerView alloc] init];
     }
@@ -91,7 +90,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (SRVideoTopBar *)topBar {
-    
     if (!_topBar) {
         _topBar = [SRVideoTopBar videoTopBar];
         _topBar.delegate = self;
@@ -100,7 +98,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (SRVideoBottomBar *)bottomBar {
-    
     if (!_bottomBar) {
         _bottomBar = [SRVideoBottomBar videoBottomBar];
         _bottomBar.delegate = self;
@@ -110,7 +107,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (UIActivityIndicatorView *)activityIndicatorView {
-    
     if (!_activityIndicatorView) {
         _activityIndicatorView = [[UIActivityIndicatorView alloc] init];
     }
@@ -118,7 +114,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (UIView *)touchView {
-    
     if (!_touchView) {
         _touchView = [[UIView alloc] init];
         _touchView.backgroundColor = [UIColor clearColor];
@@ -137,7 +132,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (MPVolumeView *)volumeView {
-    
     if (!_volumeView) {
         _volumeView = [[MPVolumeView alloc] init];
         _volumeView.showsRouteButton = NO;
@@ -153,7 +147,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (SRVideoProgressTip *)videoProgressTip {
-    
     if (!_videoProgressTip) {
         _videoProgressTip = [[SRVideoProgressTip alloc] init];
         _videoProgressTip.hidden = YES;
@@ -163,7 +156,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (UIButton *)replayBtn {
-    
     if (!_replayBtn) {
         _replayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_replayBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"replay")] forState:UIControlStateNormal];
@@ -176,12 +168,10 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 #pragma mark - Init Methods
 
 + (instancetype)playerWithVideoURL:(NSURL *)videoURL playerView:(UIView *)playerView playerSuperView:(UIView *)playerSuperView {
-    
     return [[SRVideoPlayer alloc] initWithVideoURL:videoURL playerView:playerView playerSuperView:playerSuperView];
 }
 
 - (instancetype)initWithVideoURL:(NSURL *)videoURL playerView:(UIView *)playerView playerSuperView:(UIView *)playerSuperView {
-    
     if (self = [super init]) {
         _videoURL = videoURL;
         _playerState = SRVideoPlayerStateBuffering;
@@ -201,7 +191,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)setupSubViews {
-    
     __weak typeof(self) weakSelf = self;
     
     [_playerView addSubview:self.playerLayerView];
@@ -217,7 +206,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
-        make.height.mas_equalTo(44);
+        make.height.mas_equalTo(kTopBottomBarH);
     }];
     
     [_playerView addSubview:self.bottomBar];
@@ -225,7 +214,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         make.left.mas_equalTo(0);
         make.bottom.equalTo(weakSelf.playerView);
         make.right.mas_equalTo(0);
-        make.height.mas_equalTo(44);
+        make.height.mas_equalTo(kTopBottomBarH);
     }];
     
     [_playerView addSubview:self.activityIndicatorView];
@@ -262,7 +251,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)setupOrientation {
-    
     switch ([UIDevice currentDevice].orientation) {
         case UIDeviceOrientationPortrait:
             _currentOrientation = UIInterfaceOrientationPortrait;
@@ -288,7 +276,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 #pragma mark - Monitor Methods
 
 - (void)orientationDidChange {
-    
     UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
     switch (orientation) {
         case UIDeviceOrientationPortrait:
@@ -309,7 +296,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    
     AVPlayerItem *playerItem = (AVPlayerItem *)object;
     if ([keyPath isEqualToString:SRVideoPlayerItemStatusKeyPath]) {
         NSLog(@"SRVideoPlayerItemStatusKeyPath");
@@ -382,7 +368,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)playerItemDidPlayToEnd:(NSNotification *)notification {
-    
     _playerState = SRVideoPlayerStateFinished;
     
     switch (_playerEndAction) {
@@ -401,7 +386,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)applicationWillResignActive {
-    
     if (!_playerItem) {
         return;
     }
@@ -411,7 +395,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)applicationDidBecomeActive {
-    
     if (!_playerItem) {
         return;
     }
@@ -424,7 +407,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)replayAction {
-    
     [self seekToTimeWithSeconds:0];
     
     self.topBar.hidden    = NO;
@@ -437,7 +419,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 #pragma mark - Player Methods
 
 - (void)setupPlayer {
-    
     _playerItem = [AVPlayerItem playerItemWithURL:_videoURL];
     _player = [AVPlayer playerWithPlayerItem:_playerItem];
     [(AVPlayerLayer *)self.playerLayerView.layer setPlayer:_player];
@@ -452,7 +433,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)play {
-    
     if (!_videoURL) {
         return;
     }
@@ -466,7 +446,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)pause {
-    
     if (!_playerItem) {
         return;
     }
@@ -478,7 +457,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)resume {
-    
     if (!_playerItem) {
         return;
     }
@@ -490,7 +468,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)destroyPlayer {
-    
     if (!_player) {
         return;
     }
@@ -509,12 +486,15 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     _playerItem = nil;
     
     [_playerView removeFromSuperview];
+    
+    if ([self.delegate respondsToSelector:@selector(videoPlayerDestroyed)]) {
+        [self.delegate videoPlayerDestroyed];
+    }
 }
 
 #pragma mark - Orientation Methods
 
 - (void)changeToOrientation:(UIInterfaceOrientation)orientation {
-    
     if (_currentOrientation == orientation) {
         return;
     }
@@ -558,8 +538,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[SRBrightnessView sharedBrightnessView]];
 }
 
-- (CGAffineTransform)getTransformWithOrientation:(UIInterfaceOrientation)orientation{
-    
+- (CGAffineTransform)getTransformWithOrientation:(UIInterfaceOrientation)orientation {
     if (orientation == UIInterfaceOrientationPortrait) {
         [self updateToVerticalOrientation];
         return CGAffineTransformIdentity;
@@ -577,14 +556,12 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)updateToVerticalOrientation {
-    
     _isFullScreen = NO;
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 - (void)updateToHorizontalOrientation {
-    
     _isFullScreen = YES;
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
@@ -593,7 +570,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    
     if (_controlHasJudged) {
         return NO;
     } else {
@@ -602,7 +578,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)touchViewTapAction:(UITapGestureRecognizer *)tap {
-    
     if (self.bottomBar.hidden) {
         [self showTopBottomBar];
     } else {
@@ -611,7 +586,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)touchViewPanAction:(UIPanGestureRecognizer *)pan {
-    
     CGPoint touchPoint = [pan locationInView:pan.view];
     
     if (pan.state == UIGestureRecognizerStateBegan) {
@@ -653,8 +627,9 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                 [self.videoProgressTip setTipImageViewImage:[UIImage imageNamed:SRVideoPlayerImageName(@"progress_left")]];
             }
             self.videoProgressTip.hidden = NO;
-            [self.videoProgressTip setTipLabelText:[NSString stringWithFormat:@"%@ / %@", [self formatTimeWith:(long)videoCurrentTime], self.bottomBar.totalTimeLabel.text]];
-
+            [self.videoProgressTip setTipLabelText:[NSString stringWithFormat:@"%@ / %@",
+                                                    [self formatTimeWith:(long)videoCurrentTime],
+                                                    self.bottomBar.totalTimeLabel.text]];
         } else if (_controlType == SRControlTypeVoice) {
             float voiceValue = _touchBeginVoiceValue - ((touchPoint.y - _touchBeginPoint.y) / CGRectGetHeight(pan.view.frame));
             if (voiceValue < 0) {
@@ -692,12 +667,10 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 #pragma mark - SRVideoTopBarBarDelegate
 
 - (void)videoTopBarDidClickCloseBtn {
-    
     [self destroyPlayer];
 }
 
 - (void)videoTopBarDidClickDownloadBtn {
-    
     [[SRVideoDownloader sharedDownloader] downloadVideoOfURL:_videoURL progress:^(CGFloat progress) {
         NSLog(@"progress: %.2f", progress);
     } completion:^(NSString *cacheVideoPath, NSError *error) {
@@ -712,7 +685,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 #pragma mark - SRVideoBottomBarDelegate
 
 - (void)videoBottomBarDidClickPlayPauseBtn {
-    
     if (!_playerItem) {
         return;
     }
@@ -731,7 +703,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)videoBottomBarDidClickChangeScreenBtn {
-    
     if (_isFullScreen) {
         [self changeToOrientation:UIInterfaceOrientationPortrait];
     } else {
@@ -742,7 +713,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)videoBottomBarDidTapSlider:(UISlider *)slider withTap:(UITapGestureRecognizer *)tap {
-    
     CGPoint touchPoint = [tap locationInView:slider];
     float value = (touchPoint.x / slider.frame.size.width) * slider.maximumValue;
     self.bottomBar.currentTimeLabel.text = [self formatTimeWith:(long)ceil(value)];
@@ -754,7 +724,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)videoBottomBarChangingSlider:(UISlider *)slider {
-    
     _isDragingSlider = YES;
     
     self.bottomBar.currentTimeLabel.text = [self formatTimeWith:(long)ceil(slider.value)];
@@ -763,7 +732,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)videoBottomBarDidEndChangeSlider:(UISlider *)slider {
-    
     // The delay is to prevent the sliding point from jumping.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         _isDragingSlider = NO;
@@ -780,7 +748,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 #pragma mark - Assist Methods
 
 - (NSString *)formatTimeWith:(long)time {
-    
     NSString *formatTime = nil;
     if (time < 3600) {
         formatTime = [NSString stringWithFormat:@"%02li:%02li", lround(floor(time / 60.0)), lround(floor(time / 1.0)) % 60];
@@ -791,7 +758,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)seekToTimeWithSeconds:(CGFloat)seconds {
-    
     if (_playerState == SRVideoPlayerStateStopped) {
         return;
     }
@@ -810,7 +776,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (NSTimeInterval)videoCurrentTimeWithTouchPoint:(CGPoint)touchPoint {
-    
     float videoCurrentTime = _videoCurrent + 99 * ((touchPoint.x - _touchBeginPoint.x) / [UIScreen mainScreen].bounds.size.width);
     
     if (videoCurrentTime > _videoDuration) {
@@ -823,7 +788,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)showTopBottomBar {
-    
     if (_playerState != SRVideoPlayerStatePlaying) {
         return;
     }
@@ -833,7 +797,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)hideTopBottomBar {
-    
     if (_playerState != SRVideoPlayerStatePlaying) {
         return;
     }
@@ -842,7 +805,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)timingHideBottomBarTime {
-    
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideTopBottomBar) object:nil];
     [self performSelector:@selector(hideTopBottomBar) withObject:nil afterDelay:5.0];
 }
@@ -850,7 +812,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 #pragma mark - Public Methods
 
 - (void)setVideoName:(NSString *)videoName {
-    
     _videoName = videoName;
     
     [_topBar setTitle:videoName];

@@ -12,7 +12,6 @@
 @implementation SRPlayerLayerView
 
 + (Class)layerClass {
-    
     return [AVPlayerLayer class];
 }
 

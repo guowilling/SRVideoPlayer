@@ -20,12 +20,10 @@
 @implementation SRBrightnessView
 
 - (void)dealloc {
-    
     [[UIScreen mainScreen] removeObserver:self forKeyPath:@"brightness"];
 }
 
 + (instancetype)sharedBrightnessView {
-    
     static SRBrightnessView *brightnessView;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -42,7 +40,6 @@
 }
 
 - (instancetype)init {
-    
     if (self = [super init]) {
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * 0.5, [UIScreen mainScreen].bounds.size.height * 0.5, 155, 155);
         self.layer.cornerRadius = 10;
@@ -52,7 +49,7 @@
         {
             UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
             toolbar.alpha = 0.9;
-            [self addSubview:toolbar];
+            [self addSubview:toolbar]; // for blur effect
         }
         
         {
@@ -97,7 +94,6 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    
     CGFloat newValue = [change[@"new"] floatValue];
     [self updateTips:newValue];
     
@@ -110,7 +106,6 @@
 }
 
 - (void)fadeAway {
-    
     if (self.alpha != 1.0) {
         return;
     }
@@ -120,7 +115,6 @@
 }
 
 - (void)updateTips:(CGFloat)newValue {
-    
     CGFloat stage = 1 / 15.0;
     NSInteger grade = newValue / stage;
     for (int i = 0; i < self.tips.count; i++) {
