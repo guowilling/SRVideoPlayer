@@ -22,16 +22,24 @@ static const CGFloat kItemWH = 60;
 
 @implementation SRVideoBottomBar
 
+- (UIView *)gradientView {
+    if (!_gradientView) {
+        _gradientView = [[UIView alloc] init];
+        _gradientView.backgroundColor = [UIColor clearColor];
+    }
+    return _gradientView;
+}
+
 - (CAGradientLayer *)gradientLayer {
-    [_gradientLayer removeFromSuperlayer];
-    if (_gradientLayer) {
-        _gradientLayer.frame = _gradientView.bounds;
-    } else {
+    if (!_gradientLayer) {
         _gradientLayer = [CAGradientLayer layer];
         _gradientLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor blackColor].CGColor];
-        _gradientLayer.opacity = 1.0;
-        _gradientLayer.frame = _gradientView.bounds;
+        _gradientLayer.startPoint = CGPointMake(0.5, 0);
+        _gradientLayer.endPoint = CGPointMake(0.5, 1);
+    } else {
+        [_gradientLayer removeFromSuperlayer];
     }
+    _gradientLayer.frame = _gradientView.bounds;
     return _gradientLayer;
 }
 
@@ -106,17 +114,15 @@ static const CGFloat kItemWH = 60;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _gradientView = [[UIView alloc] init];
-        _gradientView.backgroundColor = [UIColor clearColor];
-        [self addSubview:_gradientView];
+        __weak typeof(self) weakSelf = self;
+        
+        [self addSubview:self.gradientView];
         [_gradientView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
             make.right.mas_equalTo(0);
             make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-        
-        __weak typeof(self) weakSelf = self;
         
         [self addSubview:self.playPauseBtn];
         [self.playPauseBtn mas_makeConstraints:^(MASConstraintMaker *make) {

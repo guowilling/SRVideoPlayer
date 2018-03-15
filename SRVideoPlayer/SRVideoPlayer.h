@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@class SRVideoPlayer;
+
 typedef NS_ENUM(NSInteger, SRVideoPlayerState) {
     SRVedioPlayerStateFailed,
     SRVideoPlayerStateBuffering,
@@ -26,7 +28,11 @@ typedef NS_ENUM(NSInteger, SRVideoPlayerEndAction) {
 
 @protocol SRVideoPlayerDelegate <NSObject>
 
-- (void)videoPlayerDestroyed;
+@optional
+- (void)videoPlayerDidPlay:(SRVideoPlayer *)videoPlayer;
+- (void)videoPlayerDidPause:(SRVideoPlayer *)videoPlayer;
+- (void)videoPlayerDidResume:(SRVideoPlayer *)videoPlayer;
+- (void)videoPlayerDidDestroy:(SRVideoPlayer *)videoPlayer;
 
 @end
 
@@ -34,6 +40,9 @@ typedef NS_ENUM(NSInteger, SRVideoPlayerEndAction) {
 
 @property (nonatomic, weak) id<SRVideoPlayerDelegate> delegate;
 
+/**
+ The current state video player.
+ */
 @property (nonatomic, assign, readonly) SRVideoPlayerState playerState;
 
 /**
@@ -47,7 +56,7 @@ typedef NS_ENUM(NSInteger, SRVideoPlayerEndAction) {
 @property (nonatomic, copy) NSString *videoName;
 
 /**
- Creates and returns a video player with video's URL, playerView and playerSuperView.
+ Creates and returns a video player with a video's URL, playerView and playerSuperView.
 
  @param videoURL        The URL of the video.
  @param playerView      The view which you want to display the video.

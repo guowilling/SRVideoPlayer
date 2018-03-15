@@ -195,10 +195,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     
     [_playerView addSubview:self.playerLayerView];
     [self.playerLayerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.right.mas_equalTo(0);
-        make.bottom.mas_equalTo(0);
-        make.left.mas_equalTo(0);
+        make.top.left.bottom.right.mas_equalTo(0);
     }];
     
     [_playerView addSubview:self.topBar];
@@ -267,8 +264,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         default:
             break;
     }
-    
-    // Notice: Must set the app only support portrait orientation.
+    // Notice: Must set the app only support portrait orientation
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
@@ -306,7 +302,9 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                 [self.activityIndicatorView stopAnimating];
                 [self.player play];
                 _playerState = SRVideoPlayerStatePlaying;
-                
+                if ([self.delegate respondsToSelector:@selector(videoPlayerDidPlay:)]) {
+                    [self.delegate videoPlayerDidPlay:self];
+                }
                 self.bottomBar.userInteractionEnabled = YES;
                 self.touchView.userInteractionEnabled = YES; // prevents the crash that caused by dragging before the video has not load successfully
                 
@@ -450,9 +448,11 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         return;
     }
     [_player pause];
-    
     _isManualPaused = YES;
     _playerState = SRVideoPlayerStatePaused;
+    if ([self.delegate respondsToSelector:@selector(videoPlayerDidPause:)]) {
+        [self.delegate videoPlayerDidPause:self];
+    }
     [self.bottomBar.playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"start")] forState:UIControlStateNormal];
 }
 
@@ -461,9 +461,11 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         return;
     }
     [_player play];
-    
     _isManualPaused = NO;
     _playerState = SRVideoPlayerStatePlaying;
+    if ([self.delegate respondsToSelector:@selector(videoPlayerDidResume:)]) {
+        [self.delegate videoPlayerDidResume:self];
+    }
     [self.bottomBar.playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"pause")] forState:UIControlStateNormal];
 }
 
@@ -487,8 +489,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     
     [_playerView removeFromSuperview];
     
-    if ([self.delegate respondsToSelector:@selector(videoPlayerDestroyed)]) {
-        [self.delegate videoPlayerDestroyed];
+    if ([self.delegate respondsToSelector:@selector(videoPlayerDidDestroy:)]) {
+        [self.delegate videoPlayerDidDestroy:self];
     }
 }
 
