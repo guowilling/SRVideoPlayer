@@ -66,9 +66,10 @@ static const CGFloat kItemWH = 60;
 - (UILabel *)currentTimeLabel {
     if (!_currentTimeLabel) {
         _currentTimeLabel = [[UILabel alloc] init];
-        _currentTimeLabel.textColor = [UIColor whiteColor];
         _currentTimeLabel.font = [UIFont systemFontOfSize:12.0];
+        _currentTimeLabel.textColor = [UIColor whiteColor];
         _currentTimeLabel.textAlignment = NSTextAlignmentCenter;
+        _currentTimeLabel.adjustsFontSizeToFitWidth = YES;
     }
     return _currentTimeLabel;
 }
@@ -76,9 +77,10 @@ static const CGFloat kItemWH = 60;
 - (UILabel *)totalTimeLabel {
     if (!_totalTimeLabel) {
         _totalTimeLabel = [[UILabel alloc]init];
-        _totalTimeLabel.textColor = [UIColor whiteColor];
         _totalTimeLabel.font = [UIFont systemFontOfSize:12.0];
+        _totalTimeLabel.textColor = [UIColor whiteColor];
         _totalTimeLabel.textAlignment = NSTextAlignmentCenter;
+        _totalTimeLabel.adjustsFontSizeToFitWidth = YES;
     }
     return _totalTimeLabel;
 }
@@ -118,18 +120,13 @@ static const CGFloat kItemWH = 60;
         
         [self addSubview:self.gradientView];
         [_gradientView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-            make.bottom.mas_equalTo(0);
-            make.left.mas_equalTo(0);
+            make.top.left.bottom.right.mas_equalTo(0);
         }];
         
         [self addSubview:self.playPauseBtn];
         [self.playPauseBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-            make.width.mas_equalTo(kItemWH);
-            make.height.mas_equalTo(kItemWH);
+            make.top.left.mas_equalTo(0);
+            make.width.height.mas_equalTo(kItemWH);
         }];
         
         [self addSubview:self.currentTimeLabel];
@@ -142,10 +139,8 @@ static const CGFloat kItemWH = 60;
         
         [self addSubview:self.changeScreenBtn];
         [self.changeScreenBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-            make.width.mas_equalTo(kItemWH);
-            make.height.mas_equalTo(kItemWH);
+            make.top.right.mas_equalTo(0);
+            make.width.height.mas_equalTo(kItemWH);
         }];
         
         [self addSubview:self.totalTimeLabel];
@@ -158,10 +153,9 @@ static const CGFloat kItemWH = 60;
         
         [self addSubview:self.playingProgressSlider];
         [self.playingProgressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.bottom.mas_equalTo(0);
             make.left.equalTo(weakSelf.currentTimeLabel.mas_right);
-            make.top.mas_equalTo(0);
             make.right.equalTo(weakSelf.totalTimeLabel.mas_left);
-            make.bottom.mas_equalTo(0);
         }];
         
         [self addSubview:self.cacheProgressView];

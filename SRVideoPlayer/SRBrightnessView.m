@@ -32,8 +32,7 @@
         [brightnessView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo([UIApplication sharedApplication].keyWindow);
             make.centerY.equalTo([UIApplication sharedApplication].keyWindow).offset(-5);
-            make.width.mas_equalTo(155);
-            make.height.mas_equalTo(155);
+            make.width.height.mas_equalTo(155);
         }];
     });
     return brightnessView;
@@ -46,47 +45,39 @@
         self.layer.masksToBounds = YES;
         self.alpha = 0.0;
         
-        {
-            UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
-            toolbar.alpha = 0.9;
-            [self addSubview:toolbar]; // for blur effect
-        }
+        // for blur effect
+        UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.bounds];
+        toolbar.alpha = 0.9;
+        [self addSubview:toolbar];
         
-        {
-            UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, self.bounds.size.width, 30)];
-            title.font = [UIFont boldSystemFontOfSize:16];
-            title.textColor = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
-            title.textAlignment = NSTextAlignmentCenter;
-            title.text = @"亮度";
-            [self addSubview:title];
-        }
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, self.bounds.size.width, 30)];
+        title.font = [UIFont boldSystemFontOfSize:16];
+        title.textColor = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
+        title.textAlignment = NSTextAlignmentCenter;
+        title.text = @"亮度";
+        [self addSubview:title];
         
-        {            
-            UIImageView *brightnessIcon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
-            brightnessIcon.center = CGPointMake(155 * 0.5, 155 * 0.5);
-            brightnessIcon.image = [UIImage imageNamed:SRVideoPlayerImageName(@"brightness")];
-            [self addSubview:brightnessIcon];
-        }
+        UIImageView *brightnessIcon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
+        brightnessIcon.center = CGPointMake(155 * 0.5, 155 * 0.5);
+        brightnessIcon.image = [UIImage imageNamed:SRVideoPlayerImageName(@"brightness")];
+        [self addSubview:brightnessIcon];
         
-        {
-            UIView *tipsView = [[UIView alloc] initWithFrame:CGRectMake(13, 132, self.bounds.size.width - 26, 7)];
-            tipsView.backgroundColor = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
-            [self addSubview:tipsView];
-            
-            self.tips = [NSMutableArray arrayWithCapacity:16];
-            CGFloat tipW = (tipsView.bounds.size.width - 17) / 16;
-            CGFloat tipH = 5;
-            CGFloat tipY = 1;
-            for (int i = 0; i < 16; i++) {
-                CGFloat tipX = i * (tipW + 1) + 1;
-                UIImageView *image = [[UIImageView alloc] init];
-                image.backgroundColor = [UIColor whiteColor];
-                image.frame = CGRectMake(tipX, tipY, tipW, tipH);
-                [tipsView addSubview:image];
-                [self.tips addObject:image];
-            }
-            [self updateTips:[UIScreen mainScreen].brightness];
+        UIView *tipsView = [[UIView alloc] initWithFrame:CGRectMake(12.5, 132, self.bounds.size.width - 25, 7)];
+        tipsView.backgroundColor = [UIColor colorWithRed:0.25f green:0.22f blue:0.21f alpha:1.00f];
+        [self addSubview:tipsView];
+        self.tips = [NSMutableArray arrayWithCapacity:16];
+        CGFloat tipW = (tipsView.bounds.size.width - 17) / 16;
+        CGFloat tipH = 5;
+        CGFloat tipY = 1;
+        for (int i = 0; i < 16; i++) {
+            CGFloat tipX = i * (tipW + 1) + 1;
+            UIImageView *image = [[UIImageView alloc] init];
+            image.backgroundColor = [UIColor whiteColor];
+            image.frame = CGRectMake(tipX, tipY, tipW, tipH);
+            [tipsView addSubview:image];
+            [self.tips addObject:image];
         }
+        [self updateTips:[UIScreen mainScreen].brightness];
         
         [[UIScreen mainScreen] addObserver:self forKeyPath:@"brightness" options:NSKeyValueObservingOptionNew context:NULL];
     }
@@ -96,7 +87,6 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     CGFloat newValue = [change[@"new"] floatValue];
     [self updateTips:newValue];
-    
     if (self.alpha != 0) {
         return;
     }
@@ -109,7 +99,7 @@
     if (self.alpha != 1.0) {
         return;
     }
-    [UIView animateWithDuration:0.8 animations:^{
+    [UIView animateWithDuration:0.75 animations:^{
         self.alpha = 0;
     }];
 }

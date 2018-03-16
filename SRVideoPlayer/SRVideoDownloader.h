@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^Progress)(CGFloat progress);
-typedef void (^Completion)(NSString *cacheVideoPath, NSError *error);
+typedef void (^SRDownloadProgressBlock)(CGFloat progress);
+typedef void (^SRDownloadCompletionBlock)(NSString *cacheVideoPath, NSError *error);
 
 @interface SRVideoDownloader : NSObject
 
@@ -17,7 +17,7 @@ typedef void (^Completion)(NSString *cacheVideoPath, NSError *error);
 
 - (NSString *)querySandboxWithURL:(NSURL *)URL;
 
-- (void)downloadVideoOfURL:(NSURL *)URL progress:(Progress)progress completion:(Completion)completion;
+- (void)downloadVideoOfURL:(NSURL *)URL progress:(SRDownloadProgressBlock)progress completion:(SRDownloadCompletionBlock)completion;
 
 - (void)cancelDownloadActions;
 

@@ -15,14 +15,14 @@ static const CGFloat kItemWH = 60;
 
 @interface SRVideoTopBar ()
 
+@property (nonatomic, strong) UIView *gradientView;
+@property (nonatomic, strong) CAGradientLayer *gradientLayer;
+
 @property (nonatomic, strong) UIButton *closeBtn;
 
 @property (nonatomic, strong) UILabel  *titleLabel;
 
 @property (nonatomic, strong) UIButton *downloadBtn;
-
-@property (nonatomic, strong) UIView *gradientView;
-@property (nonatomic, strong) CAGradientLayer *gradientLayer;
 
 @end
 
@@ -62,8 +62,8 @@ static const CGFloat kItemWH = 60;
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.font = [UIFont systemFontOfSize:17.0];
+        _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.adjustsFontSizeToFitWidth = YES;
     }
@@ -95,26 +95,21 @@ static const CGFloat kItemWH = 60;
 
         [self addSubview:self.closeBtn];
         [self.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-            make.width.mas_equalTo(kItemWH);
-            make.height.mas_equalTo(kItemWH);
+            make.top.left.mas_equalTo(0);
+            make.width.height.mas_equalTo(kItemWH);
+        }];
+        
+        [self addSubview:self.downloadBtn];
+        [self.downloadBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.right.mas_equalTo(0);
+            make.width.height.mas_equalTo(kItemWH);
         }];
         
         [self addSubview:self.titleLabel];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(weakSelf.closeBtn.mas_right);
-            make.right.equalTo(weakSelf.mas_right).offset(-44);
-            make.top.mas_equalTo(0);
-            make.bottom.mas_equalTo(0);
-        }];
-        
-        [self addSubview:self.downloadBtn];
-        [self.downloadBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-            make.width.mas_equalTo(kItemWH);
-            make.height.mas_equalTo(kItemWH);
+            make.right.equalTo(weakSelf.downloadBtn.mas_left);
+            make.top.bottom.mas_equalTo(0);
         }];
     }
     return self;

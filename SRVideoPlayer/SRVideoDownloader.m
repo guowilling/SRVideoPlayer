@@ -9,8 +9,8 @@
 #import "SRVideoDownloader.h"
 #import <UIKit/UIKit.h>
 
-#define SRVideosDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] \
-                            stringByAppendingPathComponent:NSStringFromClass([self class])]
+#define SRVideoDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] \
+                           stringByAppendingPathComponent:NSStringFromClass([self class])]
 
 @interface SRVideoDownloader () <NSURLSessionDataDelegate>
 
@@ -23,8 +23,8 @@
 @property (nonatomic, assign) NSInteger downloadedLength;
 @property (nonatomic, assign) NSInteger expectedLength;
 
-@property (nonatomic, copy) Completion completion;
-@property (nonatomic, copy) Progress progress;
+@property (nonatomic, copy) SRDownloadProgressBlock progress;
+@property (nonatomic, copy) SRDownloadCompletionBlock completion;
 
 @end
 
@@ -50,13 +50,13 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        [self createVideosDirectory];
+        [self createVideoDirectory];
     }
     return self;
 }
 
-- (void)createVideosDirectory {
-    NSString *videosDirectory = SRVideosDirectory;
+- (void)createVideoDirectory {
+    NSString *videosDirectory = SRVideoDirectory;
     BOOL isDirectory = NO;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     BOOL isExists = [fileManager fileExistsAtPath:videosDirectory isDirectory:&isDirectory];
@@ -67,26 +67,26 @@
 
 - (NSString *)querySandboxWithURL:(NSURL *)URL {
     NSString *videoName = URL.lastPathComponent;
-    NSString *cachePath = [SRVideosDirectory stringByAppendingPathComponent:videoName];
+    NSString *cachePath = [SRVideoDirectory stringByAppendingPathComponent:videoName];
     if ([[NSFileManager defaultManager] fileExistsAtPath:cachePath]) {
         return cachePath;
     }
     return nil;
 }
 
-- (void)downloadVideoOfURL:(NSURL *)URL progress:(Progress)progress completion:(Completion)completion {
+- (void)downloadVideoOfURL:(NSURL *)URL progress:(SRDownloadProgressBlock)progress completion:(SRDownloadCompletionBlock)completion {
     if (!URL) {
         return;
     }
     if (![URL.absoluteString containsString:@"http"] && ![URL.absoluteString containsString:@"https"]) {
-        NSLog(@"It is not network video.");
+        NSLog(@"It is not a remote video");
         return;
     }
     self.progress = progress;
     self.completion = completion;
     
     NSString *videoName = URL.lastPathComponent;
-    self.cacheVideoPath = [SRVideosDirectory stringByAppendingPathComponent:videoName];
+    self.cacheVideoPath = [SRVideoDirectory stringByAppendingPathComponent:videoName];
     
     self.tmpVideoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:videoName];
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.tmpVideoPath]) {
@@ -98,17 +98,17 @@
         self.downloadedLength = 0;
     }
     
-    NSMutableURLRequest *requeset = [NSMutableURLRequest requestWithURL:URL];
-    [requeset setValue:[NSString stringWithFormat:@"bytes=%ld-", _downloadedLength] forHTTPHeaderField:@"Range"];
-    NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:requeset];
+    NSMutableURLRequest *requesetM = [NSMutableURLRequest requestWithURL:URL];
+    [requesetM setValue:[NSString stringWithFormat:@"bytes=%ld-", _downloadedLength] forHTTPHeaderField:@"Range"];
+    NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:requesetM];
     [dataTask resume];
 }
 
 #pragma mark - NSURLSessionDataDelegate
 
 - (void)URLSession:(NSURLSession *)session dataTask:(nonnull NSURLSessionDataTask *)dataTask didReceiveResponse:(nonnull NSURLResponse *)response completionHandler:(nonnull void (^)(NSURLSessionResponseDisposition))completionHandler {
-    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
-    NSDictionary *allHeaderFields = [httpResponse allHeaderFields];
+    NSHTTPURLResponse *httpURLResponse = (NSHTTPURLResponse *)response;
+    NSDictionary *allHeaderFields = [httpURLResponse allHeaderFields];
     NSString *contentRange = [allHeaderFields valueForKey:@"Content-Range"];
     self.expectedLength = [contentRange componentsSeparatedByString:@"/"].lastObject.integerValue;
     completionHandler(NSURLSessionResponseAllow);
@@ -116,11 +116,10 @@
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
     [self.fileHandle writeData:data];
-    
     self.downloadedLength += data.length;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.progress) {
-            self.progress(self.downloadedLength * 1.0 / self.expectedLength);
+            self.progress(1.0 * self.downloadedLength / self.expectedLength);
         }
     });
 }
@@ -152,9 +151,9 @@
 
 - (void)clearCachedVideos {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:SRVideosDirectory]) {
-        [fileManager removeItemAtPath:SRVideosDirectory error:nil];
-        [self createVideosDirectory];
+    if ([fileManager fileExistsAtPath:SRVideoDirectory]) {
+        [fileManager removeItemAtPath:SRVideoDirectory error:nil];
+        [self createVideoDirectory];
     }
 }
 
