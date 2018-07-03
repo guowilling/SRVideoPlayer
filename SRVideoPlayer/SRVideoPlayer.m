@@ -71,6 +71,10 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 @property (nonatomic, strong) UISlider *volumeSlider;
 @property (nonatomic, strong) UIButton *replayBtn;
 
+@property (nonatomic, strong) UIButton *lockScreenBtn;
+
+@property (nonatomic, assign, getter=isScreenLocked) BOOL screenLocked;
+
 @end
 
 @implementation SRVideoPlayer
@@ -165,6 +169,17 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     return _replayBtn;
 }
 
+- (UIButton *)lockScreenBtn {
+    if (!_lockScreenBtn) {
+        _lockScreenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_lockScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"unlock")] forState:UIControlStateNormal];
+        [_lockScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"lock")] forState:UIControlStateSelected];
+        [_lockScreenBtn addTarget:self action:@selector(lockScreenBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+        _lockScreenBtn.hidden = YES;
+    }
+    return _lockScreenBtn;
+}
+
 #pragma mark - Init Methods
 
 + (instancetype)playerWithVideoURL:(NSURL *)videoURL playerView:(UIView *)playerView playerSuperView:(UIView *)playerSuperView {
@@ -207,7 +222,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [_playerView addSubview:self.bottomBar];
     [self.bottomBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(0);
-        make.bottom.equalTo(weakSelf.playerView);
+        make.bottom.mas_equalTo(0);
         make.height.mas_equalTo(kTopBottomBarH);
     }];
     
@@ -234,6 +249,12 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [_playerView addSubview:self.replayBtn];
     [self.replayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(weakSelf.playerView);
+    }];
+    
+    [_playerView addSubview:self.lockScreenBtn];
+    [self.lockScreenBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(weakSelf.playerView).offset(-20);
+        make.centerY.equalTo(weakSelf.playerView);
     }];
     
     [_playerView addSubview:self.volumeView];
@@ -405,6 +426,16 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [self timingHideTopBottomBar];
 }
 
+- (void)lockScreenBtnAction:(UIButton *)btn {
+    btn.selected = !btn.selected;
+    
+    if (btn.selected) {
+        self.screenLocked = YES;
+    } else {
+        self.screenLocked = NO;
+    }
+}
+
 #pragma mark - Player Methods
 
 - (void)play {
@@ -544,12 +575,18 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 - (void)updateToVerticalOrientation {
     _isFullScreen = NO;
+    
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    
+    self.lockScreenBtn.hidden = YES;
 }
 
 - (void)updateToHorizontalOrientation {
     _isFullScreen = YES;
+    
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
+    self.lockScreenBtn.hidden = NO;
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -563,6 +600,13 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)touchViewTapAction:(UITapGestureRecognizer *)tap {
+    if (self.isScreenLocked) {
+        if (self.lockScreenBtn.isHidden) {
+            self.lockScreenBtn.hidden = NO;
+            [self performSelector:@selector(hideLockScreenBtn) withObject:nil afterDelay:3.0];
+        }
+        return;
+    }
     if (self.bottomBar.hidden) {
         [self showTopBottomBar];
     } else {
@@ -571,6 +615,9 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)touchViewPanAction:(UIPanGestureRecognizer *)pan {
+    if (self.isScreenLocked) {
+        return;
+    }
     [self showTopBottomBar];
     CGPoint touchPoint = [pan locationInView:pan.view];
     if (pan.state == UIGestureRecognizerStateBegan) {
@@ -759,6 +806,10 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     }
     self.topBar.hidden = NO;
     self.bottomBar.hidden = NO;
+    if (self.isFullScreen) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideLockScreenBtn) object:nil];
+        self.lockScreenBtn.hidden = NO;
+    }
     [self timingHideTopBottomBar];
 }
 
@@ -768,6 +819,13 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     }
     self.topBar.hidden = YES;
     self.bottomBar.hidden = YES;
+    if (self.isFullScreen) {
+        [self performSelector:@selector(hideLockScreenBtn) withObject:nil afterDelay:3.0];
+    }
+}
+
+- (void)hideLockScreenBtn {
+    self.lockScreenBtn.hidden = YES;
 }
 
 - (void)timingHideTopBottomBar {
