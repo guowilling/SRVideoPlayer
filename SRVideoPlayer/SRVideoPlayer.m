@@ -495,7 +495,10 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
             __weak typeof(self) weakSelf = self;
             [_playerSuperView addSubview:_playerView];
             [_playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.top.left.width.height.mas_equalTo(CGRectGetMinY(weakSelf.playerViewOriginalRect));
+                make.top.mas_equalTo(CGRectGetMinY(weakSelf.playerViewOriginalRect));
+                make.left.mas_equalTo(CGRectGetMinX(weakSelf.playerViewOriginalRect));
+                make.width.mas_equalTo(CGRectGetWidth(weakSelf.playerViewOriginalRect));
+                make.height.mas_equalTo(CGRectGetHeight(weakSelf.playerViewOriginalRect));
             }];
             [_bottomBar.changeScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"full_screen")] forState:UIControlStateNormal];
             break;
@@ -505,7 +508,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         {
             [[UIApplication sharedApplication].keyWindow addSubview:_playerView];
             [_playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.width.height.equalTo(@([UIScreen mainScreen].bounds.size.height));
+                make.width.equalTo(@([UIScreen mainScreen].bounds.size.height));
+                make.height.equalTo(@([UIScreen mainScreen].bounds.size.width));
                 make.center.equalTo([UIApplication sharedApplication].keyWindow);
             }];
             [_bottomBar.changeScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"small_screen")] forState:UIControlStateNormal];
