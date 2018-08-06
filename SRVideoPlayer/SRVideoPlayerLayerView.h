@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SRPlayerLayerView : UIView
+@interface SRVideoPlayerLayerView : UIView
 
 @end

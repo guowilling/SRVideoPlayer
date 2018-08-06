@@ -10,15 +10,15 @@
 
 @protocol SRVideoBottomBarDelegate <NSObject>
 
-- (void)videoBottomBarDidClickPlayPauseBtn;
-- (void)videoBottomBarDidClickChangeScreenBtn;
-- (void)videoBottomBarDidTapSlider:(UISlider *)slider withTap:(UITapGestureRecognizer *)tap;
-- (void)videoBottomBarChangingSlider:(UISlider *)slider;
-- (void)videoBottomBarDidEndChangeSlider:(UISlider *)slider;
+- (void)videoPlayerBottomBarDidClickPlayPauseBtn;
+- (void)videoPlayerBottomBarDidClickChangeScreenBtn;
+- (void)videoPlayerBottomBarDidTapSlider:(UISlider *)slider withTap:(UITapGestureRecognizer *)tap;
+- (void)videoPlayerBottomBarChangingSlider:(UISlider *)slider;
+- (void)videoPlayerBottomBarDidEndChangeSlider:(UISlider *)slider;
 
 @end
 
-@interface SRVideoBottomBar : UIView
+@interface SRVideoPlayerBottomBar : UIView
 
 @property (nonatomic, weak) id<SRVideoBottomBarDelegate> delegate;
 
@@ -29,8 +29,7 @@
 @property (nonatomic, strong) UILabel *totalTimeLabel;
 
 @property (nonatomic, strong) UISlider *playingProgressSlider;
-
-@property (nonatomic, strong) UIProgressView *cacheProgressView;
+@property (nonatomic, strong) UIProgressView *bufferedProgressView;
 
 + (instancetype)videoBottomBar;
 

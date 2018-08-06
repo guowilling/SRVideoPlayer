@@ -6,27 +6,25 @@
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
-#import "SRVideoTopBar.h"
+#import "SRVideoPlayerTopBar.h"
 #import "Masonry.h"
 
 static const CGFloat kItemWH = 60;
 
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
-@interface SRVideoTopBar ()
+@interface SRVideoPlayerTopBar ()
 
 @property (nonatomic, strong) UIView *gradientView;
 @property (nonatomic, strong) CAGradientLayer *gradientLayer;
 
 @property (nonatomic, strong) UIButton *closeBtn;
-
 @property (nonatomic, strong) UILabel  *titleLabel;
-
 @property (nonatomic, strong) UIButton *downloadBtn;
 
 @end
 
-@implementation SRVideoTopBar
+@implementation SRVideoPlayerTopBar
 
 - (UIView *)gradientView {
     if (!_gradientView) {
@@ -81,7 +79,7 @@ static const CGFloat kItemWH = 60;
 }
 
 + (instancetype)videoTopBar {
-    return [[SRVideoTopBar alloc] init];
+    return [[SRVideoPlayerTopBar alloc] init];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -107,8 +105,8 @@ static const CGFloat kItemWH = 60;
         
         [self addSubview:self.titleLabel];
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(weakSelf.closeBtn.mas_right);
-            make.right.equalTo(weakSelf.downloadBtn.mas_left);
+            make.left.mas_equalTo(weakSelf.closeBtn.mas_right);
+            make.right.mas_equalTo(weakSelf.downloadBtn.mas_left);
             make.top.bottom.mas_equalTo(0);
         }];
     }
@@ -122,15 +120,15 @@ static const CGFloat kItemWH = 60;
 }
 
 - (void)closeBtnAction {
-    if ([_delegate respondsToSelector:@selector(videoTopBarDidClickCloseBtn)]) {
-        [_delegate videoTopBarDidClickCloseBtn];
+    if ([_delegate respondsToSelector:@selector(videoPlayerTopBarDidClickCloseBtn)]) {
+        [_delegate videoPlayerTopBarDidClickCloseBtn];
     }
 }
 
 - (void)downloadBtnAction {
     self.downloadBtn.userInteractionEnabled = NO;
-    if ([_delegate respondsToSelector:@selector(videoTopBarDidClickDownloadBtn)]) {
-        [_delegate videoTopBarDidClickDownloadBtn];
+    if ([_delegate respondsToSelector:@selector(videoPlayerTopBarDidClickDownloadBtn)]) {
+        [_delegate videoPlayerTopBarDidClickDownloadBtn];
     }
 }
 

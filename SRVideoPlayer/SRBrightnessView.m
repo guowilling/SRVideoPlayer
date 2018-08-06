@@ -23,7 +23,7 @@
     [[UIScreen mainScreen] removeObserver:self forKeyPath:@"brightness"];
 }
 
-+ (instancetype)sharedBrightnessView {
++ (instancetype)sharedView {
     static SRBrightnessView *brightnessView;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

@@ -15,8 +15,8 @@
 		6878ACC81E1B528200332891 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6878ACC61E1B528200332891 /* Main.storyboard */; };
 		6878ACCA1E1B528200332891 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6878ACC91E1B528200332891 /* Assets.xcassets */; };
 		6878AD241E1B572700332891 /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6878AD231E1B572700332891 /* VideoViewController.m */; };
-		687B0B681E1BCC550038E9D4 /* SRVideoBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B601E1BCC550038E9D4 /* SRVideoBottomBar.m */; };
-		687B0B691E1BCC550038E9D4 /* SRPlayerLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B621E1BCC550038E9D4 /* SRPlayerLayerView.m */; };
+		687B0B681E1BCC550038E9D4 /* SRVideoPlayerBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B601E1BCC550038E9D4 /* SRVideoPlayerBottomBar.m */; };
+		687B0B691E1BCC550038E9D4 /* SRVideoPlayerLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B621E1BCC550038E9D4 /* SRVideoPlayerLayerView.m */; };
 		687B0B6B1E1BCC550038E9D4 /* SRVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B651E1BCC550038E9D4 /* SRVideoPlayer.m */; };
 		687B0B6C1E1BCC550038E9D4 /* SRVideoProgressTip.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B0B671E1BCC550038E9D4 /* SRVideoProgressTip.m */; };
 		68A0AE091E54060500A8BCEF /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A0ADF11E54060500A8BCEF /* MASCompositeConstraint.m */; };
@@ -29,7 +29,7 @@
 		68A0AE101E54060500A8BCEF /* NSLayoutConstraint+MASDebugAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A0AE031E54060500A8BCEF /* NSLayoutConstraint+MASDebugAdditions.m */; };
 		68A0AE111E54060500A8BCEF /* View+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A0AE051E54060500A8BCEF /* View+MASAdditions.m */; };
 		68A0AE121E54060500A8BCEF /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 68A0AE081E54060500A8BCEF /* ViewController+MASAdditions.m */; };
-		68AF545D1E1F98CA000A6E97 /* SRVideoTopBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */; };
+		68AF545D1E1F98CA000A6E97 /* SRVideoPlayerTopBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AF545C1E1F98CA000A6E97 /* SRVideoPlayerTopBar.m */; };
 		68AF545F1E1F995D000A6E97 /* 好好(你的名字).mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 68AF545E1E1F995D000A6E97 /* 好好(你的名字).mp4 */; };
 		6EAD9CB31EBF229400ABA4DE /* SRVideoPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6EAD9CB21EBF229400ABA4DE /* SRVideoPlayer.bundle */; };
 		6EBF58241EB117AF00B2B986 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EBF58231EB117AF00B2B986 /* LaunchScreen.storyboard */; };
@@ -51,10 +51,10 @@
 		6878ACCE1E1B528200332891 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6878AD221E1B572700332891 /* VideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoViewController.h; sourceTree = "<group>"; };
 		6878AD231E1B572700332891 /* VideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoViewController.m; sourceTree = "<group>"; };
-		687B0B5F1E1BCC550038E9D4 /* SRVideoBottomBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoBottomBar.h; sourceTree = "<group>"; };
-		687B0B601E1BCC550038E9D4 /* SRVideoBottomBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoBottomBar.m; sourceTree = "<group>"; };
-		687B0B611E1BCC550038E9D4 /* SRPlayerLayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPlayerLayerView.h; sourceTree = "<group>"; };
-		687B0B621E1BCC550038E9D4 /* SRPlayerLayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRPlayerLayerView.m; sourceTree = "<group>"; };
+		687B0B5F1E1BCC550038E9D4 /* SRVideoPlayerBottomBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoPlayerBottomBar.h; sourceTree = "<group>"; };
+		687B0B601E1BCC550038E9D4 /* SRVideoPlayerBottomBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoPlayerBottomBar.m; sourceTree = "<group>"; };
+		687B0B611E1BCC550038E9D4 /* SRVideoPlayerLayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoPlayerLayerView.h; sourceTree = "<group>"; };
+		687B0B621E1BCC550038E9D4 /* SRVideoPlayerLayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoPlayerLayerView.m; sourceTree = "<group>"; };
 		687B0B641E1BCC550038E9D4 /* SRVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoPlayer.h; sourceTree = "<group>"; };
 		687B0B651E1BCC550038E9D4 /* SRVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoPlayer.m; sourceTree = "<group>"; };
 		687B0B661E1BCC550038E9D4 /* SRVideoProgressTip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoProgressTip.h; sourceTree = "<group>"; };
@@ -84,8 +84,8 @@
 		68A0AE061E54060500A8BCEF /* View+MASShorthandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+MASShorthandAdditions.h"; sourceTree = "<group>"; };
 		68A0AE071E54060500A8BCEF /* ViewController+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+MASAdditions.h"; sourceTree = "<group>"; };
 		68A0AE081E54060500A8BCEF /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+MASAdditions.m"; sourceTree = "<group>"; };
-		68AF545B1E1F98CA000A6E97 /* SRVideoTopBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoTopBar.h; sourceTree = "<group>"; };
-		68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoTopBar.m; sourceTree = "<group>"; };
+		68AF545B1E1F98CA000A6E97 /* SRVideoPlayerTopBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVideoPlayerTopBar.h; sourceTree = "<group>"; };
+		68AF545C1E1F98CA000A6E97 /* SRVideoPlayerTopBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVideoPlayerTopBar.m; sourceTree = "<group>"; };
 		68AF545E1E1F995D000A6E97 /* 好好(你的名字).mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "好好(你的名字).mp4"; sourceTree = "<group>"; };
 		6EAD9CB21EBF229400ABA4DE /* SRVideoPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SRVideoPlayer.bundle; sourceTree = "<group>"; };
 		6EBF58231EB117AF00B2B986 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -151,16 +151,16 @@
 			children = (
 				687B0B641E1BCC550038E9D4 /* SRVideoPlayer.h */,
 				687B0B651E1BCC550038E9D4 /* SRVideoPlayer.m */,
-				68AF545B1E1F98CA000A6E97 /* SRVideoTopBar.h */,
-				68AF545C1E1F98CA000A6E97 /* SRVideoTopBar.m */,
-				687B0B5F1E1BCC550038E9D4 /* SRVideoBottomBar.h */,
-				687B0B601E1BCC550038E9D4 /* SRVideoBottomBar.m */,
+				687B0B611E1BCC550038E9D4 /* SRVideoPlayerLayerView.h */,
+				687B0B621E1BCC550038E9D4 /* SRVideoPlayerLayerView.m */,
+				68AF545B1E1F98CA000A6E97 /* SRVideoPlayerTopBar.h */,
+				68AF545C1E1F98CA000A6E97 /* SRVideoPlayerTopBar.m */,
+				687B0B5F1E1BCC550038E9D4 /* SRVideoPlayerBottomBar.h */,
+				687B0B601E1BCC550038E9D4 /* SRVideoPlayerBottomBar.m */,
 				687B0B661E1BCC550038E9D4 /* SRVideoProgressTip.h */,
 				687B0B671E1BCC550038E9D4 /* SRVideoProgressTip.m */,
 				6815E1041E95F2220041AE85 /* SRBrightnessView.h */,
 				6815E1051E95F2220041AE85 /* SRBrightnessView.m */,
-				687B0B611E1BCC550038E9D4 /* SRPlayerLayerView.h */,
-				687B0B621E1BCC550038E9D4 /* SRPlayerLayerView.m */,
 				6815E1071E96196E0041AE85 /* SRVideoDownloader.h */,
 				6815E1081E96196E0041AE85 /* SRVideoDownloader.m */,
 				6EAD9CB21EBF229400ABA4DE /* SRVideoPlayer.bundle */,
@@ -277,10 +277,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				68A0AE0E1E54060500A8BCEF /* MASViewConstraint.m in Sources */,
-				68AF545D1E1F98CA000A6E97 /* SRVideoTopBar.m in Sources */,
+				68AF545D1E1F98CA000A6E97 /* SRVideoPlayerTopBar.m in Sources */,
 				68A0AE0D1E54060500A8BCEF /* MASViewAttribute.m in Sources */,
-				687B0B691E1BCC550038E9D4 /* SRPlayerLayerView.m in Sources */,
-				687B0B681E1BCC550038E9D4 /* SRVideoBottomBar.m in Sources */,
+				687B0B691E1BCC550038E9D4 /* SRVideoPlayerLayerView.m in Sources */,
+				687B0B681E1BCC550038E9D4 /* SRVideoPlayerBottomBar.m in Sources */,
 				687B0B6C1E1BCC550038E9D4 /* SRVideoProgressTip.m in Sources */,
 				68A0AE091E54060500A8BCEF /* MASCompositeConstraint.m in Sources */,
 				68A0AE0B1E54060500A8BCEF /* MASConstraintMaker.m in Sources */,

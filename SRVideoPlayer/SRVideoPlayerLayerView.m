@@ -6,10 +6,10 @@
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
-#import "SRPlayerLayerView.h"
+#import "SRVideoPlayerLayerView.h"
 #import <AVFoundation/AVFoundation.h>
 
-@implementation SRPlayerLayerView
+@implementation SRVideoPlayerLayerView
 
 + (Class)layerClass {
     return [AVPlayerLayer class];

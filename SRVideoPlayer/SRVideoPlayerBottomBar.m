@@ -6,21 +6,21 @@
 //  Copyright © 2017年 SR. All rights reserved.
 //
 
-#import "SRVideoBottomBar.h"
+#import "SRVideoPlayerBottomBar.h"
 #import "Masonry.h"
 
 static const CGFloat kItemWH = 60;
 
 #define SRVideoPlayerImageName(fileName) [@"SRVideoPlayer.bundle" stringByAppendingPathComponent:fileName]
 
-@interface SRVideoBottomBar ()
+@interface SRVideoPlayerBottomBar ()
 
 @property (nonatomic, strong) UIView *gradientView;
 @property (nonatomic, strong) CAGradientLayer *gradientLayer;
 
 @end
 
-@implementation SRVideoBottomBar
+@implementation SRVideoPlayerBottomBar
 
 - (UIView *)gradientView {
     if (!_gradientView) {
@@ -99,19 +99,19 @@ static const CGFloat kItemWH = 60;
     return _playingProgressSlider;
 }
 
-- (UIProgressView *)cacheProgressView {
-    if (!_cacheProgressView) {
-        _cacheProgressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-        _cacheProgressView.progressTintColor = [UIColor colorWithWhite:1 alpha:0.75];
-        _cacheProgressView.trackTintColor = [UIColor clearColor];
-        _cacheProgressView.layer.cornerRadius = 0.5;
-        _cacheProgressView.layer.masksToBounds = YES;
+- (UIProgressView *)bufferedProgressView {
+    if (!_bufferedProgressView) {
+        _bufferedProgressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+        _bufferedProgressView.progressTintColor = [UIColor colorWithWhite:1 alpha:0.75];
+        _bufferedProgressView.trackTintColor = [UIColor clearColor];
+        _bufferedProgressView.layer.cornerRadius = 0.5;
+        _bufferedProgressView.layer.masksToBounds = YES;
     }
-    return _cacheProgressView;
+    return _bufferedProgressView;
 }
 
 + (instancetype)videoBottomBar {
-    return [[SRVideoBottomBar alloc] init];
+    return [[SRVideoPlayerBottomBar alloc] init];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -146,7 +146,7 @@ static const CGFloat kItemWH = 60;
         [self addSubview:self.totalTimeLabel];
         [self.totalTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
-            make.right.equalTo(weakSelf.changeScreenBtn.mas_left);
+            make.right.mas_equalTo(weakSelf.changeScreenBtn.mas_left);
             make.width.mas_equalTo(55);
             make.height.mas_equalTo(kItemWH);
         }];
@@ -154,15 +154,15 @@ static const CGFloat kItemWH = 60;
         [self addSubview:self.playingProgressSlider];
         [self.playingProgressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.bottom.mas_equalTo(0);
-            make.left.equalTo(weakSelf.currentTimeLabel.mas_right);
-            make.right.equalTo(weakSelf.totalTimeLabel.mas_left);
+            make.left.mas_equalTo(weakSelf.currentTimeLabel.mas_right);
+            make.right.mas_equalTo(weakSelf.totalTimeLabel.mas_left);
         }];
         
-        [self addSubview:self.cacheProgressView];
-        [self.cacheProgressView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(weakSelf.currentTimeLabel.mas_right);
-            make.right.equalTo(weakSelf.totalTimeLabel.mas_left);
-            make.centerY.equalTo(weakSelf.playingProgressSlider.mas_centerY).offset(1);
+        [self addSubview:self.bufferedProgressView];
+        [self.bufferedProgressView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(weakSelf.currentTimeLabel.mas_right);
+            make.right.mas_equalTo(weakSelf.totalTimeLabel.mas_left);
+            make.centerY.mas_equalTo(weakSelf.playingProgressSlider.mas_centerY).offset(1);
             make.height.mas_equalTo(1);
         }];
     }
@@ -176,32 +176,32 @@ static const CGFloat kItemWH = 60;
 }
 
 - (void)playPauseBtnAction {
-    if ([_delegate respondsToSelector:@selector(videoBottomBarDidClickPlayPauseBtn)]) {
-        [_delegate videoBottomBarDidClickPlayPauseBtn];
+    if ([_delegate respondsToSelector:@selector(videoPlayerBottomBarDidClickPlayPauseBtn)]) {
+        [_delegate videoPlayerBottomBarDidClickPlayPauseBtn];
     }
 }
 
 - (void)changeScreenBtnAction {
-    if ([_delegate respondsToSelector:@selector(videoBottomBarDidClickChangeScreenBtn)]) {
-        [_delegate videoBottomBarDidClickChangeScreenBtn];
+    if ([_delegate respondsToSelector:@selector(videoPlayerBottomBarDidClickChangeScreenBtn)]) {
+        [_delegate videoPlayerBottomBarDidClickChangeScreenBtn];
     }
 }
 
 - (void)sliderChanging:(UISlider *)sender {
-    if ([_delegate respondsToSelector:@selector(videoBottomBarChangingSlider:)]) {
-        [_delegate videoBottomBarChangingSlider:sender];
+    if ([_delegate respondsToSelector:@selector(videoPlayerBottomBarChangingSlider:)]) {
+        [_delegate videoPlayerBottomBarChangingSlider:sender];
     }
 }
 
 - (void)sliderDidEndChange:(UISlider *)sender {
-    if ([_delegate respondsToSelector:@selector(videoBottomBarDidEndChangeSlider:)]) {
-        [_delegate videoBottomBarDidEndChangeSlider:sender];
+    if ([_delegate respondsToSelector:@selector(videoPlayerBottomBarDidEndChangeSlider:)]) {
+        [_delegate videoPlayerBottomBarDidEndChangeSlider:sender];
     }
 }
 
 - (void)sliderTapAction:(UITapGestureRecognizer *)tap {
-    if ([_delegate respondsToSelector:@selector(videoBottomBarDidTapSlider:withTap:)]) {
-        [_delegate videoBottomBarDidTapSlider:self.playingProgressSlider withTap:tap];
+    if ([_delegate respondsToSelector:@selector(videoPlayerBottomBarDidTapSlider:withTap:)]) {
+        [_delegate videoPlayerBottomBarDidTapSlider:self.playingProgressSlider withTap:tap];
     }
 }
 

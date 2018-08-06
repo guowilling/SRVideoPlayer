@@ -10,12 +10,12 @@
 
 @protocol SRVideoTopBarBarDelegate <NSObject>
 
-- (void)videoTopBarDidClickCloseBtn;
-- (void)videoTopBarDidClickDownloadBtn;
+- (void)videoPlayerTopBarDidClickCloseBtn;
+- (void)videoPlayerTopBarDidClickDownloadBtn;
 
 @end
 
-@interface SRVideoTopBar : UIView
+@interface SRVideoPlayerTopBar : UIView
 
 @property (nonatomic, weak) id<SRVideoTopBarBarDelegate> delegate;
 

@@ -28,7 +28,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    [_videoPlayer destroyPlayer];
+    [_videoPlayer destroy];
 }
 
 - (void)showVideoPlayer {
@@ -37,7 +37,7 @@
     [self.view addSubview:playerView];
     _videoPlayer = [SRVideoPlayer playerWithVideoURL:_videoURL playerView:playerView playerSuperView:playerView.superview];
     _videoPlayer.videoName = @"Here Is The Video Name";
-    _videoPlayer.playerEndAction = SRVideoPlayerEndActionLoop;
+//    _videoPlayer.playerEndAction = SRVideoPlayerEndActionLoop;
     [_videoPlayer play];
 }
 

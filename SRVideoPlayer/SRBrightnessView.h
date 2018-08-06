@@ -10,6 +10,6 @@
 
 @interface SRBrightnessView : UIView
 
-+ (instancetype)sharedBrightnessView;
++ (instancetype)sharedView;
 
 @end

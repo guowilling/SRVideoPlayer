@@ -8,14 +8,14 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "Masonry.h"
 #import "SRVideoPlayer.h"
-#import "SRPlayerLayerView.h"
+#import "SRVideoPlayerLayerView.h"
 #import "SRVideoProgressTip.h"
-#import "SRVideoTopBar.h"
-#import "SRVideoBottomBar.h"
+#import "SRVideoPlayerTopBar.h"
+#import "SRVideoPlayerBottomBar.h"
 #import "SRBrightnessView.h"
 #import "SRVideoDownloader.h"
+#import "Masonry.h"
 
 static const CGFloat kTopBottomBarH = 60;
 
@@ -45,12 +45,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 @property (nonatomic, assign) BOOL controlHasJudged;
 @property (nonatomic, assign) SRControlType controlType;
 
-@property (nonatomic, assign) BOOL isFullScreen;
-@property (nonatomic, assign) BOOL isDragingSlider;
-@property (nonatomic, assign) BOOL isManualPaused;
-
-@property (nonatomic, assign) CGPoint touchBeginPoint;
-@property (nonatomic, assign) CGFloat touchBeginVoiceValue;
+@property (nonatomic, assign) CGPoint panBeginPoint;
+@property (nonatomic, assign) CGFloat panBeginVoiceValue;
 
 @property (nonatomic, assign) NSTimeInterval videoDuration;
 @property (nonatomic, assign) NSTimeInterval videoCurrent;
@@ -60,20 +56,22 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 @property (nonatomic, strong) NSObject *playbackTimeObserver;
 
 @property (nonatomic, weak  ) UIView *playerView;
-@property (nonatomic, weak  ) UIView *playerSuperView;
 @property (nonatomic, assign) CGRect  playerViewOriginalRect;
-@property (nonatomic, strong) SRPlayerLayerView *playerLayerView;
+@property (nonatomic, weak  ) UIView *playerSuperView;
 
-@property (nonatomic, strong) SRVideoTopBar *topBar;
-@property (nonatomic, strong) SRVideoBottomBar *bottomBar;
-@property (nonatomic, strong) SRVideoProgressTip *videoProgressTip;
+@property (nonatomic, strong) SRVideoPlayerLayerView *playerLayerView;
+@property (nonatomic, strong) SRVideoPlayerTopBar *topBar;
+@property (nonatomic, strong) SRVideoPlayerBottomBar *bottomBar;
+@property (nonatomic, strong) SRVideoProgressTip *progressTip;
 @property (nonatomic, strong) MPVolumeView *volumeView;
 @property (nonatomic, strong) UISlider *volumeSlider;
+@property (nonatomic, strong) UIButton *lockScreenBtn;
 @property (nonatomic, strong) UIButton *replayBtn;
 
-@property (nonatomic, strong) UIButton *lockScreenBtn;
-
-@property (nonatomic, assign, getter=isScreenLocked) BOOL screenLocked;
+@property (nonatomic, assign) BOOL isFullScreen;
+@property (nonatomic, assign) BOOL isDragingSlider;
+@property (nonatomic, assign) BOOL isManualPaused;
+@property (nonatomic, assign) BOOL screenLocked;
 
 @end
 
@@ -81,29 +79,29 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 - (void)dealloc {
     NSLog(@"%s", __func__);
-    [self destroyPlayer];
+    [self destroy];
 }
 
 #pragma mark - Lazy Load
 
-- (SRPlayerLayerView *)playerLayerView {
+- (SRVideoPlayerLayerView *)playerLayerView {
     if (!_playerLayerView) {
-        _playerLayerView = [[SRPlayerLayerView alloc] init];
+        _playerLayerView = [[SRVideoPlayerLayerView alloc] init];
     }
     return _playerLayerView;
 }
 
-- (SRVideoTopBar *)topBar {
+- (SRVideoPlayerTopBar *)topBar {
     if (!_topBar) {
-        _topBar = [SRVideoTopBar videoTopBar];
+        _topBar = [SRVideoPlayerTopBar videoTopBar];
         _topBar.delegate = self;
     }
     return _topBar;
 }
 
-- (SRVideoBottomBar *)bottomBar {
+- (SRVideoPlayerBottomBar *)bottomBar {
     if (!_bottomBar) {
-        _bottomBar = [SRVideoBottomBar videoBottomBar];
+        _bottomBar = [SRVideoPlayerBottomBar videoBottomBar];
         _bottomBar.delegate = self;
         _bottomBar.userInteractionEnabled = NO;
     }
@@ -121,16 +119,13 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     if (!_touchView) {
         _touchView = [[UIView alloc] init];
         _touchView.backgroundColor = [UIColor clearColor];
-        
+        _touchView.userInteractionEnabled = NO;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchViewTapAction:)];
         tap.delegate = self;
         [_touchView addGestureRecognizer:tap];
-        
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(touchViewPanAction:)];
         pan.delegate = self;
         [_touchView addGestureRecognizer:pan];
-        
-        _touchView.userInteractionEnabled = NO;
     }
     return _touchView;
 }
@@ -150,13 +145,13 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     return _volumeView;
 }
 
-- (SRVideoProgressTip *)videoProgressTip {
-    if (!_videoProgressTip) {
-        _videoProgressTip = [[SRVideoProgressTip alloc] init];
-        _videoProgressTip.hidden = YES;
-        _videoProgressTip.layer.cornerRadius = 10.0;
+- (SRVideoProgressTip *)progressTip {
+    if (!_progressTip) {
+        _progressTip = [[SRVideoProgressTip alloc] init];
+        _progressTip.hidden = YES;
+        _progressTip.layer.cornerRadius = 10.0;
     }
-    return _videoProgressTip;
+    return _progressTip;
 }
 
 - (UIButton *)replayBtn {
@@ -195,7 +190,6 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         _playerView = playerView;
         _playerView.backgroundColor = [UIColor blackColor];
         _playerView.userInteractionEnabled = YES;
-        
         _playerViewOriginalRect = playerView.frame;
         _playerSuperView = playerSuperView;
         
@@ -221,8 +215,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     
     [_playerView addSubview:self.bottomBar];
     [self.bottomBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.mas_equalTo(0);
-        make.bottom.mas_equalTo(0);
+        make.left.right.bottom.mas_equalTo(0);
         make.height.mas_equalTo(kTopBottomBarH);
     }];
     
@@ -234,32 +227,32 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     
     [_playerView addSubview:self.touchView];
     [self.touchView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(weakSelf.playerLayerView);
-        make.top.equalTo(weakSelf.playerLayerView).offset(44);
-        make.bottom.equalTo(weakSelf.playerLayerView).offset(-44);
+        make.left.right.mas_equalTo(weakSelf.playerLayerView);
+        make.top.mas_equalTo(weakSelf.playerLayerView).offset(44);
+        make.bottom.mas_equalTo(weakSelf.playerLayerView).offset(-44);
     }];
     
-    [_playerView addSubview:self.videoProgressTip];
-    [self.videoProgressTip mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(weakSelf.playerView);
-        make.width.equalTo(@150);
-        make.height.equalTo(@90);
+    [_playerView addSubview:self.progressTip];
+    [self.progressTip mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.mas_equalTo(weakSelf.playerView);
+        make.width.mas_equalTo(150);
+        make.height.mas_equalTo(90);
     }];
     
     [_playerView addSubview:self.replayBtn];
     [self.replayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(weakSelf.playerView);
+        make.center.mas_equalTo(weakSelf.playerView);
     }];
     
     [_playerView addSubview:self.lockScreenBtn];
     [self.lockScreenBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(weakSelf.playerView).offset(-20);
-        make.centerY.equalTo(weakSelf.playerView);
+        make.right.mas_equalTo(weakSelf.playerView).offset(-20);
+        make.centerY.mas_equalTo(weakSelf.playerView);
     }];
     
     [_playerView addSubview:self.volumeView];
     
-    [SRBrightnessView sharedBrightnessView];
+    [SRBrightnessView sharedView];
 }
 
 - (void)setupOrientation {
@@ -281,12 +274,12 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     }
     // notice: must set the app only support portrait orientation
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 #pragma mark - Monitor Methods
 
-- (void)orientationDidChange {
+- (void)deviceOrientationDidChange {
     UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
     switch (orientation) {
         case UIDeviceOrientationPortrait:
@@ -321,16 +314,16 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                     [self.delegate videoPlayerDidPlay:self];
                 }
                 self.bottomBar.userInteractionEnabled = YES;
-                self.touchView.userInteractionEnabled = YES; // prevents the crash that caused by dragging before the video has not load successfully
+                self.touchView.userInteractionEnabled = YES; // prevents the crash that caused by dragging before the video has not loaded successfully
                 
-                _videoDuration = playerItem.duration.value / playerItem.duration.timescale; // total time of the video
+                _videoDuration = playerItem.duration.value / playerItem.duration.timescale; // total time of the video in second
                 self.bottomBar.totalTimeLabel.text = [self formatTimeWith:(long)ceil(_videoDuration)];
                 self.bottomBar.playingProgressSlider.minimumValue = 0.0;
                 self.bottomBar.playingProgressSlider.maximumValue = _videoDuration;
                 
-                __weak __typeof(self)weakSelf = self;
+                __weak __typeof(self) weakSelf = self;
                 _playbackTimeObserver = [_player addPeriodicTimeObserverForInterval:CMTimeMake(1, 1) queue:NULL usingBlock:^(CMTime time) {
-                    __strong __typeof(weakSelf)strongSelf = weakSelf;
+                    __strong __typeof(weakSelf) strongSelf = weakSelf;
                     if (strongSelf.isDragingSlider) {
                         return;
                     }
@@ -354,12 +347,12 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
             case AVPlayerStatusFailed:
             {
                 // loading video error which usually a resource issue
-                NSLog(@"AVPlayerStatusReadyToPlay");
+                NSLog(@"AVPlayerStatusFailed");
                 NSLog(@"player error: %@", _player.error);
                 NSLog(@"playerItem error: %@", _playerItem.error);
                 _playerState = SRVedioPlayerStateFailed;
                 [self.activityIndicatorView stopAnimating];
-                [self destroyPlayer];
+                [self destroy];
                 break;
             }
             case AVPlayerStatusUnknown:
@@ -374,7 +367,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         CMTimeRange timeRange = [playerItem.loadedTimeRanges.firstObject CMTimeRangeValue]; // buffer area
         NSTimeInterval timeBuffered = CMTimeGetSeconds(timeRange.start) + CMTimeGetSeconds(timeRange.duration); // buffer progress
         NSTimeInterval timeTotal = CMTimeGetSeconds(playerItem.duration);
-        [self.bottomBar.cacheProgressView setProgress:timeBuffered / timeTotal animated:YES];
+        [self.bottomBar.bufferedProgressView setProgress:timeBuffered / timeTotal animated:YES];
     }
 }
 
@@ -390,7 +383,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
             [self replayAction];
             break;
         case SRVideoPlayerEndActionDestroy:
-            [self destroyPlayer];
+            [self destroy];
             break;
     }
 }
@@ -427,13 +420,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)lockScreenBtnAction:(UIButton *)btn {
-    btn.selected = !btn.selected;
-    
-    if (btn.selected) {
-        self.screenLocked = YES;
-    } else {
-        self.screenLocked = NO;
-    }
+    btn.selected = !btn.isSelected;
+    self.screenLocked = btn.isSelected;
 }
 
 #pragma mark - Player Methods
@@ -479,11 +467,11 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 - (void)setupPlayer {
     _playerItem = [AVPlayerItem playerItemWithURL:_videoURL];
+    [_playerItem addObserver:self forKeyPath:SRVideoPlayerItemStatusKeyPath options:NSKeyValueObservingOptionNew context:nil];
+    [_playerItem addObserver:self forKeyPath:SRVideoPlayerItemLoadedTimeRangesKeyPath options:NSKeyValueObservingOptionNew context:nil];
     _player = [AVPlayer playerWithPlayerItem:_playerItem];
     [(AVPlayerLayer *)self.playerLayerView.layer setPlayer:_player];
     
-    [_playerItem addObserver:self forKeyPath:SRVideoPlayerItemStatusKeyPath options:NSKeyValueObservingOptionNew context:nil];
-    [_playerItem addObserver:self forKeyPath:SRVideoPlayerItemLoadedTimeRangesKeyPath options:NSKeyValueObservingOptionNew context:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidPlayToEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:_playerItem];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -491,7 +479,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [self.activityIndicatorView startAnimating];
 }
 
-- (void)destroyPlayer {
+- (void)destroy {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (_player) {
         if (_playerState == SRVideoPlayerStatePlaying) {
@@ -539,9 +527,9 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         {
             [[UIApplication sharedApplication].keyWindow addSubview:_playerView];
             [_playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.width.equalTo(@([UIScreen mainScreen].bounds.size.height));
-                make.height.equalTo(@([UIScreen mainScreen].bounds.size.width));
-                make.center.equalTo([UIApplication sharedApplication].keyWindow);
+                make.width.mas_equalTo([UIScreen mainScreen].bounds.size.height);
+                make.height.mas_equalTo([UIScreen mainScreen].bounds.size.width);
+                make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
             }];
             [_bottomBar.changeScreenBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"small_screen")] forState:UIControlStateNormal];
             break;
@@ -553,7 +541,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
         _playerView.transform = [self getTransformWithOrientation:orientation];
     }];
     
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[SRBrightnessView sharedBrightnessView]];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[SRBrightnessView sharedView]];
 }
 
 - (CGAffineTransform)getTransformWithOrientation:(UIInterfaceOrientation)orientation {
@@ -574,19 +562,15 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)updateToVerticalOrientation {
-    _isFullScreen = NO;
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    
+    self.isFullScreen = NO;
     self.lockScreenBtn.hidden = YES;
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 - (void)updateToHorizontalOrientation {
-    _isFullScreen = YES;
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    
+    self.isFullScreen = YES;
     self.lockScreenBtn.hidden = NO;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -600,7 +584,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)touchViewTapAction:(UITapGestureRecognizer *)tap {
-    if (self.isScreenLocked) {
+    if (self.screenLocked) {
         if (self.lockScreenBtn.isHidden) {
             self.lockScreenBtn.hidden = NO;
             [self performSelector:@selector(hideLockScreenBtn) withObject:nil afterDelay:3.0];
@@ -615,29 +599,32 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)touchViewPanAction:(UIPanGestureRecognizer *)pan {
-    if (self.isScreenLocked) {
+    if (self.playerState == SRVideoPlayerStateFinished) {
+        return;
+    }
+    if (self.screenLocked) {
         return;
     }
     [self showTopBottomBar];
-    CGPoint touchPoint = [pan locationInView:pan.view];
+    CGPoint panPoint = [pan locationInView:pan.view];
     if (pan.state == UIGestureRecognizerStateBegan) {
-        _touchBeginPoint = touchPoint;
+        _panBeginPoint = panPoint;
         _moved = NO;
         _controlHasJudged = NO;
-        _touchBeginVoiceValue = _volumeSlider.value;
+        _panBeginVoiceValue = _volumeSlider.value;
     }
     if (pan.state == UIGestureRecognizerStateChanged) {
-        if (fabs(touchPoint.x - _touchBeginPoint.x) < 10 && fabs(touchPoint.y - _touchBeginPoint.y) < 10) {
+        if (fabs(panPoint.x - _panBeginPoint.x) < 10 && fabs(panPoint.y - _panBeginPoint.y) < 10) {
             return;
         }
         _moved = YES;
         if (!_controlHasJudged) {
-            float tan = fabs(touchPoint.y - _touchBeginPoint.y) / fabs(touchPoint.x - _touchBeginPoint.x);
+            float tan = fabs(panPoint.y - _panBeginPoint.y) / fabs(panPoint.x - _panBeginPoint.x);
             if (tan < 1 / sqrt(3)) { // sliding angle is less than 30 degrees
                 _controlType = SRControlTypeProgress;
                 _controlHasJudged = YES;
             } else if (tan > sqrt(3)) { // sliding angle is greater than 60 degrees
-                if (_touchBeginPoint.x < pan.view.frame.size.width / 2) { // the left side of the screen controls the brightness
+                if (_panBeginPoint.x < pan.view.frame.size.width / 2) { // the left side of the screen controls the brightness
                     _controlType = SRControlTypeLight;
                 } else { // the right side of the screen controls the volume
                     _controlType = SRControlTypeVoice;
@@ -648,18 +635,18 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
             }
         }
         if (_controlType == SRControlTypeProgress) {
-            NSTimeInterval videoCurrentTime = [self videoCurrentTimeWithTouchPoint:touchPoint];
+            NSTimeInterval videoCurrentTime = [self videoCurrentTimeWithPanPoint:panPoint];
             if (videoCurrentTime > _videoCurrent) {
-                [self.videoProgressTip setTipImageViewImage:[UIImage imageNamed:SRVideoPlayerImageName(@"progress_right")]];
+                [self.progressTip setTipImageViewImage:[UIImage imageNamed:SRVideoPlayerImageName(@"progress_right")]];
             } else if(videoCurrentTime < _videoCurrent) {
-                [self.videoProgressTip setTipImageViewImage:[UIImage imageNamed:SRVideoPlayerImageName(@"progress_left")]];
+                [self.progressTip setTipImageViewImage:[UIImage imageNamed:SRVideoPlayerImageName(@"progress_left")]];
             }
-            self.videoProgressTip.hidden = NO;
-            [self.videoProgressTip setTipLabelText:[NSString stringWithFormat:@"%@ / %@",
+            self.progressTip.hidden = NO;
+            [self.progressTip setTipLabelText:[NSString stringWithFormat:@"%@ / %@",
                                                     [self formatTimeWith:(long)videoCurrentTime],
                                                     self.bottomBar.totalTimeLabel.text]];
         } else if (_controlType == SRControlTypeVoice) {
-            float voiceValue = _touchBeginVoiceValue - ((touchPoint.y - _touchBeginPoint.y) / CGRectGetHeight(pan.view.frame));
+            float voiceValue = _panBeginVoiceValue - ((panPoint.y - _panBeginPoint.y) / CGRectGetHeight(pan.view.frame));
             if (voiceValue < 0) {
                 self.volumeSlider.value = 0;
             } else if (voiceValue > 1) {
@@ -668,7 +655,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
                 self.volumeSlider.value = voiceValue;
             }
         } else if (_controlType == SRControlTypeLight) {
-            [UIScreen mainScreen].brightness -= ((touchPoint.y - _touchBeginPoint.y) / 5000);
+            [UIScreen mainScreen].brightness -= ((panPoint.y - _panBeginPoint.y) / 5000);
         } else if (_controlType == SRControlTypeNone) {
             if (self.bottomBar.hidden) {
                 [self showTopBottomBar];
@@ -680,8 +667,8 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     if (pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled) {
         _controlHasJudged = NO;
         if (_moved && _controlType == SRControlTypeProgress) {
-            self.videoProgressTip.hidden = YES;
-            [self seekToTimeWithSeconds:[self videoCurrentTimeWithTouchPoint:touchPoint]];
+            self.progressTip.hidden = YES;
+            [self seekToTimeWithSeconds:[self videoCurrentTimeWithPanPoint:panPoint]];
             [self.bottomBar.playPauseBtn setImage:[UIImage imageNamed:SRVideoPlayerImageName(@"pause")] forState:UIControlStateNormal];
         }
     }
@@ -689,11 +676,11 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 #pragma mark - SRVideoTopBarBarDelegate
 
-- (void)videoTopBarDidClickCloseBtn {
-    [self destroyPlayer];
+- (void)videoPlayerTopBarDidClickCloseBtn {
+    [self destroy];
 }
 
-- (void)videoTopBarDidClickDownloadBtn {
+- (void)videoPlayerTopBarDidClickDownloadBtn {
     [[SRVideoDownloader sharedDownloader] downloadVideoOfURL:_videoURL progress:^(CGFloat progress) {
         NSLog(@"downloadVideo progress: %.2f", progress);
     } completion:^(NSString *cacheVideoPath, NSError *error) {
@@ -707,7 +694,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 
 #pragma mark - SRVideoBottomBarDelegate
 
-- (void)videoBottomBarDidClickPlayPauseBtn {
+- (void)videoPlayerBottomBarDidClickPlayPauseBtn {
     if (!_playerItem) {
         return;
     }
@@ -724,7 +711,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [self timingHideTopBottomBar];
 }
 
-- (void)videoBottomBarDidClickChangeScreenBtn {
+- (void)videoPlayerBottomBarDidClickChangeScreenBtn {
     if (_isFullScreen) {
         [self changeToOrientation:UIInterfaceOrientationPortrait];
     } else {
@@ -733,7 +720,7 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [self timingHideTopBottomBar];
 }
 
-- (void)videoBottomBarDidTapSlider:(UISlider *)slider withTap:(UITapGestureRecognizer *)tap {
+- (void)videoPlayerBottomBarDidTapSlider:(UISlider *)slider withTap:(UITapGestureRecognizer *)tap {
     CGPoint touchPoint = [tap locationInView:slider];
     float value = (touchPoint.x / slider.frame.size.width) * slider.maximumValue;
     self.bottomBar.currentTimeLabel.text = [self formatTimeWith:(long)ceil(value)];
@@ -742,13 +729,13 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
     [self timingHideTopBottomBar];
 }
 
-- (void)videoBottomBarChangingSlider:(UISlider *)slider {
+- (void)videoPlayerBottomBarChangingSlider:(UISlider *)slider {
     _isDragingSlider = YES;
     self.bottomBar.currentTimeLabel.text = [self formatTimeWith:(long)ceil(slider.value)];
     [self timingHideTopBottomBar];
 }
 
-- (void)videoBottomBarDidEndChangeSlider:(UISlider *)slider {
+- (void)videoPlayerBottomBarDidEndChangeSlider:(UISlider *)slider {
     // delay to prevent the sliding point from jumping
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         _isDragingSlider = NO;
@@ -772,25 +759,23 @@ typedef NS_ENUM(NSUInteger, SRControlType) {
 }
 
 - (void)seekToTimeWithSeconds:(CGFloat)seconds {
-    if (_playerState == SRVideoPlayerStateStopped) {
-        return;
-    }
     seconds = MAX(0, seconds);
     seconds = MIN(seconds, _videoDuration);
+    __weak typeof(self) weakSelf = self;
     [self.player pause];
     [self.player seekToTime:CMTimeMakeWithSeconds(seconds, NSEC_PER_SEC) completionHandler:^(BOOL finished) {
-        [self.player play];
-        _isManualPaused = NO;
-        _playerState = SRVideoPlayerStatePlaying;
-        if (!_playerItem.isPlaybackLikelyToKeepUp) {
-            _playerState = SRVideoPlayerStateBuffering;
-            [self.activityIndicatorView startAnimating];
+        [weakSelf.player play];
+        weakSelf.isManualPaused = NO;
+        weakSelf.playerState = SRVideoPlayerStatePlaying;
+        if (!weakSelf.playerItem.isPlaybackLikelyToKeepUp) {
+            weakSelf.playerState = SRVideoPlayerStateBuffering;
+            [weakSelf.activityIndicatorView startAnimating];
         }
     }];
 }
 
-- (NSTimeInterval)videoCurrentTimeWithTouchPoint:(CGPoint)touchPoint {
-    float videoCurrentTime = _videoCurrent + 99 * ((touchPoint.x - _touchBeginPoint.x) / [UIScreen mainScreen].bounds.size.width);
+- (NSTimeInterval)videoCurrentTimeWithPanPoint:(CGPoint)panPoint {
+    float videoCurrentTime = _videoCurrent + 99 * ((panPoint.x - _panBeginPoint.x) / [UIScreen mainScreen].bounds.size.width);
     if (videoCurrentTime > _videoDuration) {
         videoCurrentTime = _videoDuration;
     }

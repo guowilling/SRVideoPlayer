@@ -57,7 +57,7 @@
         
         [self addSubview:self.tipLabel];
         [self.tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(_tipImageView.mas_bottom);
+            make.top.mas_equalTo(weakSelf.tipImageView.mas_bottom);
             make.width.mas_equalTo(150);
             make.height.mas_equalTo(30);
             make.centerX.equalTo(weakSelf);
